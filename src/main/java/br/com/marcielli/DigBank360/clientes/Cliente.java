@@ -2,6 +2,8 @@ package br.com.marcielli.DigBank360.clientes;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,14 +27,18 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	
 	private String nome;
 	
 	private Long cpf;
 	
 	private LocalDate dataNascimento;
 	
+	//@OneToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "tb_endereco", referencedColumnName = "id")
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "tb_endereco", referencedColumnName = "id")
+	@JoinColumn(name = "endereco_id")
+	@JsonIgnoreProperties("cliente")
 	private Endereco endereco;	
 	
 	@Override

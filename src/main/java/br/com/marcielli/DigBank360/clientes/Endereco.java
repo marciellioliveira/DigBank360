@@ -1,5 +1,7 @@
 package br.com.marcielli.DigBank360.clientes;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +31,9 @@ public class Endereco {
 	private String bairro;
 	private String complemento;	
 	
+	//@OneToOne(mappedBy = "endereco")
 	@OneToOne(mappedBy = "endereco")
+	@JsonIgnoreProperties("endereco")
 	private Cliente cliente;
 	
 	@Override

@@ -3,6 +3,7 @@ package br.com.marcielli.DigBank360.clientes;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +30,25 @@ public class ClienteController { //Controlador entre o BD (Repository) e o Usuá
 	
 	//POST
 	@PostMapping("/save")
-	public Cliente create(@RequestBody Cliente cliente) {
-		return clienteService.save(cliente);
+	public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {	
+		
+		try {
+			Cliente added = clienteService.save(cliente);
+			
+			if(added != null) {
+				return new ResponseEntity<>(HttpStatus.CREATED);
+				
+				
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				
+			}
+		} catch (Exception e) {
+			
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		
 	}
 	
 	//GET CLIENTS BY ID
@@ -58,7 +76,7 @@ public class ClienteController { //Controlador entre o BD (Repository) e o Usuá
 	}
 	
 	//DELETAR
-	@PutMapping("/deletebyId/{id}")
+	@DeleteMapping("/deletebyId/{id}")
 	public void delete(@PathVariable Long id){		 
 		clienteService.findById(id)
 		.map(record -> {
