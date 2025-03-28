@@ -1,6 +1,8 @@
 package br.com.marcielli.DigBank360.clientes;
 
 import java.time.LocalDate;
+import java.util.List;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -11,6 +13,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -37,12 +41,19 @@ public class Cliente {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "endereco_id")
 	@JsonIgnoreProperties("cliente")
-	private Endereco endereco;	
+	private Endereco endereco;		
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "conta_id")
-	@JsonIgnoreProperties("cliente")
-	private Conta conta;
+	@OneToMany //One Cliente para ToMany Muitas contas
+	private List<Conta> contas;
+	
+	
+	
+	
+	//@OneToOne(cascade = CascadeType.ALL)	
+//	@JoinColumn(name = "conta_id")
+//	@JsonIgnoreProperties("cliente")
+	
+	
 	
 	@Override
 	public String toString() {		

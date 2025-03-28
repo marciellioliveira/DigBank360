@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/cliente")
 public class ClienteController { //Controlador entre o BD (Repository) e o Usuário
 
 	@Autowired

@@ -1,9 +1,9 @@
-package br.com.marcielli.DigBank360.contas;
+package br.com.marcielli.DigBank360.contas.corrente;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ContaRepository extends JpaRepository<Conta, Long>{
+public interface CorrenteRepository extends JpaRepository<Corrente, Long> {
 
 }
