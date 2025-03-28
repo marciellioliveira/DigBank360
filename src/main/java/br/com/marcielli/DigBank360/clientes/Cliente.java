@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import br.com.marcielli.DigBank360.contas.Conta;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,8 +26,7 @@ public class Cliente {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
+	private Long id;	
 	
 	private String nome;
 	
@@ -34,12 +34,15 @@ public class Cliente {
 	
 	private LocalDate dataNascimento;
 	
-	//@OneToOne(cascade = CascadeType.ALL)
-	//@JoinColumn(name = "tb_endereco", referencedColumnName = "id")
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "endereco_id")
 	@JsonIgnoreProperties("cliente")
 	private Endereco endereco;	
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "conta_id")
+	@JsonIgnoreProperties("cliente")
+	private Conta conta;
 	
 	@Override
 	public String toString() {		

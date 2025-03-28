@@ -30,22 +30,24 @@ public class ClienteController { //Controlador entre o BD (Repository) e o Usuá
 	
 	//POST
 	@PostMapping("/save")
-	public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {	
+	public ResponseEntity<String> create(@RequestBody Cliente cliente) {	
 		
 		try {
 			Cliente added = clienteService.save(cliente);
 			
 			if(added != null) {
-				return new ResponseEntity<>(HttpStatus.CREATED);
+				return new ResponseEntity<>("Cliente "+cliente.getNome()+" adicionado com sucesso!", HttpStatus.CREATED);	
+				//return new ResponseEntity<>(HttpStatus.CREATED);
 				
 				
 			} else {
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+				return new ResponseEntity<>("Cliente "+cliente.getNome()+" não foi adicionado!\nDigite os dados corretamente.", HttpStatus.NOT_ACCEPTABLE);	
+				//return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 				
 			}
 		} catch (Exception e) {
-			
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("Cliente "+cliente.getNome()+" não foi adicionado!", HttpStatus.INTERNAL_SERVER_ERROR);
+			//return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		

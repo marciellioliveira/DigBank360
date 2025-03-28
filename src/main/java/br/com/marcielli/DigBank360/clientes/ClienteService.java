@@ -8,14 +8,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import exception.EnderecoNotValidException;
-import exception.DataNascNotValidException;
-import exception.NomeNotValidException;
 import exception.UnsuportedAnoNascimentoException;
 import exception.UnsuportedBairroException;
 import exception.UnsuportedCepException;
 import exception.UnsuportedCidadeException;
 import exception.UnsuportedComplementoException;
+import exception.UnsuportedCpfException;
 import exception.UnsuportedDiaNascimentoException;
 import exception.UnsuportedEstadoException;
 import exception.UnsuportedMesNascimentoException;
@@ -78,6 +76,10 @@ public class ClienteService {
 				throw new UnsuportedComplementoException("Complemento inválido");
 			}		
 			
+			if(!isCpfValido(cliente.getCpf())) {
+				throw new UnsuportedCpfException("CPF inválido");
+			}
+			
 			return clienteRepository.save(cliente);
 			
 		} catch (UnsuportedNameException e) {
@@ -113,13 +115,13 @@ public class ClienteService {
 		}  catch (UnsuportedComplementoException e) {
 			System.err.println("Erro: "+e);
 			return null;
+		}  catch (UnsuportedCpfException e) {
+			System.err.println("Erro: "+e);
+			return null;
 		} catch (Exception e) {
 			System.err.println("Erro: "+e);
 			return null;
 		}
-		
-		
-
 	}
 	
 	//FIND BY ID
@@ -140,6 +142,78 @@ public class ClienteService {
 	//LIST ALL
 	public List<Cliente> getAll(){
 		return clienteRepository.findAll();
+	}
+	
+	
+	
+	
+	
+	
+	//Validação de campos
+	public boolean isCpfValido(Long cpf) {
+		
+		String cpfNotValid = cpf.toString();
+		
+		try {	
+		    String cpfValida = Long.toString(cpf);
+		    
+		    cpfValida = cpfValida.replaceAll("[^0-9]", "");
+		    // Verifica se o CPF possui 11 dígitos
+		    if (cpfValida.length() != 11) {
+		    	return false;
+		    }
+		    
+		    // Verifica se o CPF possui todos os dígitos iguais (exemplo: 111.111.111-11)
+		    if (cpfValida.matches("(\\d)\\1{10}")) {
+		    	return false;
+		    }
+		    
+		    // Cálculo do primeiro dígito verificador
+		    int valor = 0;
+		    int j = 10;
+		    
+		    for (int i = 0; i < 9; i++) {
+		        char letra = cpfValida.charAt(i);
+		        int caracter = letra - '0';
+		        valor += caracter * j;
+		        j--;
+		    }
+		    
+		    int resultado = (valor * 10) % 11;
+		    if (resultado == 10) {
+		        resultado = 0;
+		    }
+		    
+		    // Verifica se o primeiro dígito verificador está correto
+		    if (resultado != (cpfValida.charAt(9) - '0')) {
+		       return false;
+		    }
+		    
+		    // Cálculo do segundo dígito verificador
+		    int valor2 = 0;
+		    int b = 11;
+		    
+		    for (int i = 0; i < 10; i++) {
+		        char letra2 = cpfValida.charAt(i);
+		        int caracter2 = letra2 - '0';
+		        valor2 += caracter2 * b;
+		        b--;
+		    }
+		    
+		    int resultado2 = (valor2 * 10) % 11;
+		    if (resultado2 == 10) {
+		        resultado2 = 0;
+		    }
+		    
+		    // Verifica se o segundo dígito verificador está correto
+		    if (resultado2 != (cpfValida.charAt(10) - '0')) {
+		    	return false;
+		    }
+		} catch (Exception e) {
+			return false;
+		}
+
+	    return true;
 	}
 	
 	public boolean validarNome(String nome) {
@@ -233,7 +307,7 @@ public class ClienteService {
 	
 		
 		if(diaNasc <= 0 || diaNasc >31) {
-			throw new DataNascNotValidException("O dia de nascimento deve estar entre 01 e 31");
+			throw new UnsuportedDiaNascimentoException("O dia de nascimento deve estar entre 01 e 31");
 		}
 		
 		return true;

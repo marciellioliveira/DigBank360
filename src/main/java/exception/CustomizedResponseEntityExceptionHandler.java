@@ -121,4 +121,13 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
+	
+	//Unsuported Cpf Exception - Customizada
+		@ExceptionHandler(UnsuportedCpfException.class)
+		public final ResponseEntity<ExceptionResponse> handleBadRequestExceptionsCpf(Exception ex, WebRequest request) {
+			ExceptionResponse exceptionResponse = new ExceptionResponse(
+					new Date(), ex.getMessage(), request.getDescription(false));
+			
+			return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+		}
 }

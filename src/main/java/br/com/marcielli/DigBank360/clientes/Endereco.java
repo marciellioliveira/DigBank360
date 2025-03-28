@@ -31,7 +31,6 @@ public class Endereco {
 	private String bairro;
 	private String complemento;	
 	
-	//@OneToOne(mappedBy = "endereco")
 	@OneToOne(mappedBy = "endereco")
 	@JsonIgnoreProperties("endereco")
 	private Cliente cliente;
