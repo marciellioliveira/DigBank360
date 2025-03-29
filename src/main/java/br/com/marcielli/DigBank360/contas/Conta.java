@@ -1,7 +1,12 @@
 package br.com.marcielli.DigBank360.contas;
 
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import br.com.marcielli.DigBank360.clientes.Cliente;
+import br.com.marcielli.DigBank360.contas.corrente.Corrente;
+import br.com.marcielli.DigBank360.contas.poupanca.Poupanca;
 import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
@@ -29,6 +34,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@JsonTypeInfo( //Essa anotação permite que o Jackson saiba qual classe concreta ele tem que instanciar de acordo com o Json.
+	    use = JsonTypeInfo.Id.NAME, //Vai identificar o tipo real de uma instância
+	    include = JsonTypeInfo.As.PROPERTY, //Mapeia os tipos de contas para o valor correspondente ao que enviei no JSON
+	    property = "tipoConta")  
+	@JsonSubTypes({
+	    @JsonSubTypes.Type(value = Corrente.class, name = "CORRENTE"),
+	    @JsonSubTypes.Type(value = Poupanca.class, name = "POUPANCA")
+	}) //Com essa @, eu posso usar a classe Conta abstrata no Controller porque configurei a hierarquia de classes 
 public abstract class Conta {
 	
 	@Id
