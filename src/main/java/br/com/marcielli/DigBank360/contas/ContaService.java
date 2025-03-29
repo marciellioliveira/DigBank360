@@ -47,34 +47,39 @@ public class ContaService {
 			//Se Cliente não tem dados válidos
 			if(clienteService.save(conta.getCliente()) == null) {
 				throw new UnsuportedClientDataWrongException("Dados do cliente inválido. Confira os dados e tente novamente.");
-			}
-			
+			}			
 			
 			if(conta.getSaldoDaConta() == null) {
 				throw new UnsuportedClientDataWrongException("Saldo da conta é nulo");
-			}
+			}			
 			
-			
-			//conta.getCliente().setContas(contasDoCliente);
-			//return update(newConta);
 			return contaRepository.save(newConta);
-			
-			
+						
 		} catch (UnsuportedContaNotValidException e) {
+			
 			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		} catch (UnsuportedClientDontExistException e) {
+			
 			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		} catch (UnsuportedClientDataWrongException e) {
+			
 			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		} catch(UnsuportedContaSaldoNullException e) {
+			
 			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		} catch (Exception e) {
+			
 			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}		
 	}
 	

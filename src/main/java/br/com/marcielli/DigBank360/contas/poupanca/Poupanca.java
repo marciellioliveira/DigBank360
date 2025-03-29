@@ -26,8 +26,8 @@ public class Poupanca extends Conta {
 	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	//private Long id;
 	
-	private float acrescimoTaxaRendimento;
-	private double taxaMensal;
+	private Double acrescimoTaxaRendimento;
+	private Double taxaMensal;
 	
 	public Poupanca(Long id, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
 			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta, String numeroDaConta) {
@@ -36,7 +36,7 @@ public class Poupanca extends Conta {
 		if(saldoDaConta <= 1000) {
 			categoriaDaConta = CategoriaDaConta.COMUM;
 			super.setCategoriaDaConta(categoriaDaConta);
-			this.acrescimoTaxaRendimento = 0.005f;
+			this.acrescimoTaxaRendimento = 0.005d;
 			
 			this.taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
 			
@@ -48,7 +48,7 @@ public class Poupanca extends Conta {
 		if(saldoDaConta > 1000 && saldoDaConta <= 5000) {
 			categoriaDaConta = CategoriaDaConta.SUPER;
 			super.setCategoriaDaConta(categoriaDaConta);
-			this.acrescimoTaxaRendimento = 0.007f;
+			this.acrescimoTaxaRendimento = 0.007d;
 			
 			this.taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
 			
@@ -60,7 +60,7 @@ public class Poupanca extends Conta {
 		if(saldoDaConta > 5000) {
 			categoriaDaConta = CategoriaDaConta.PREMIUM;
 			super.setCategoriaDaConta(categoriaDaConta);
-			this.acrescimoTaxaRendimento = 0.009f;
+			this.acrescimoTaxaRendimento = 0.009d;
 			
 			this.taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
 			
@@ -70,11 +70,23 @@ public class Poupanca extends Conta {
 		}
 	}
 	
-	public Poupanca(TipoDeConta tipo, String numeroDaConta, Cliente cliente) {
+	public Poupanca(TipoDeConta tipo, String numeroDaConta, Cliente cliente, CategoriaDaConta categoriaDaConta, Double saldoDaConta, Double acrescimoTaxaRendimento, Double taxaMensal) {
+		
 		super();
 		setTipoDeConta(tipo);
-		setNumeroDaConta(numeroDaConta);
+		setNumeroDaConta(numeroDaConta);	
 		setCliente(cliente);
+		setCategoriaDaConta(categoriaDaConta);
+		setSaldoDaConta(saldoDaConta);
+		this.acrescimoTaxaRendimento = acrescimoTaxaRendimento;
+		this.taxaMensal = taxaMensal;
+		System.out.println("\nCONTA: "+TipoDeConta.CORRENTE+" n° "+numeroDaConta);
+		System.out.println("SALDO: "+saldoDaConta);
+		System.out.println("CATEGORIA: "+categoriaDaConta);
+		System.err.println("ACRESCIMO DE RENDIMENTO: "+acrescimoTaxaRendimento);
+		System.err.println("TAXA MENSAL: "+taxaMensal);
+		System.out.println("CLIENTE: "+cliente.getNome()+" - CPF: "+cliente.getCpf()+" - DATA DE NASCIMENTO: "+cliente.getDataNascimento()+"\nENDEREÇO: "
+		+cliente.getEndereco()+"\nCONTAS: "+cliente.getContas());
 	}
 	
 	@Override
@@ -92,10 +104,10 @@ public class Poupanca extends Conta {
 		setSaldoDaConta(getSaldoDaConta() + valor);		
 	}
 	
-	public void atualizaCategoria(float valorAntigo, float valor, int enviaOuRecebe) {
+	public void atualizaCategoria(Double valorAntigo, Double valor, int enviaOuRecebe) {
 		CategoriaDaConta categoria;
 		
-		float total = (float) 0.0;
+		Double total = 0.0;
 		//Valor que ta enviando ou recebendo do pix
 		
 		if(enviaOuRecebe == 1) { //enviaOuRecebe = 1 (Envia pix)

@@ -60,11 +60,11 @@ public abstract class Conta {
 	@Column(name = "categoria_conta")
 	private CategoriaDaConta categoriaDaConta;
 	
-	
+	@JsonIgnore
 	@Column(name = "tipo_cartao")
 	private TipoDeCartao tipoDeCartao;
 	
-
+	@JsonIgnore
 	@Column(name = "tipo_transferencia")
 	private TipoDeTransferencia tipoDeTransferencia;
 	
