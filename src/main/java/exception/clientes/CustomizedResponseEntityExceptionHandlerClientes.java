@@ -1,4 +1,4 @@
-package exception;
+package exception.clientes;
 
 import java.util.Date;
 
@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import exception.ExceptionResponse;
+
 @ControllerAdvice
 @RestController
-public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class CustomizedResponseEntityExceptionHandlerClientes extends ResponseEntityExceptionHandler {
 	
 	//Excessão genérica - 500 Internal Server Error
 	@ExceptionHandler(Exception.class)
@@ -25,7 +27,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	
 	//Unsuported Name Exception - Customizada
 	@ExceptionHandler(UnsuportedNameException.class)
-	public final ResponseEntity<ExceptionResponse> handleBadRequestExceptionsName(Exception ex, WebRequest request) {
+	public final ResponseEntity<ExceptionResponse> handleBadRequestExceptions(Exception ex, WebRequest request) {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(
 				new Date(), ex.getMessage(), request.getDescription(false));
 		
@@ -123,11 +125,43 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 	}
 	
 	//Unsuported Cpf Exception - Customizada
-		@ExceptionHandler(UnsuportedCpfException.class)
-		public final ResponseEntity<ExceptionResponse> handleBadRequestExceptionsCpf(Exception ex, WebRequest request) {
-			ExceptionResponse exceptionResponse = new ExceptionResponse(
-					new Date(), ex.getMessage(), request.getDescription(false));
-			
-			return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
-		}
+	@ExceptionHandler(UnsuportedCpfException.class)
+	public final ResponseEntity<ExceptionResponse> handleBadRequestExceptionsCpf(Exception ex, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(
+				new Date(), ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+
+	//Unsuported Cliente não existe - Precisa cadastrar primeiro para depois cadastrar a conta Exception - Customizada
+	@ExceptionHandler(UnsuportedClientDontExistException.class)
+	public final ResponseEntity<ExceptionResponse> handleBadRequestExceptionsClienteDontExistValid(Exception ex, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(
+				new Date(), ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+	//Unsuported Dados do cliente inválido Exception - Customizada
+	@ExceptionHandler(UnsuportedClientDataWrongException.class)
+	public final ResponseEntity<ExceptionResponse> handleBadRequestExceptionsClientDataWrongtValid(Exception ex, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(
+				new Date(), ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+	//Unsuported Dados do cliente inválido Exception - Customizada
+	@ExceptionHandler(UnsuportedClientDuplicatedExistException.class)
+	public final ResponseEntity<ExceptionResponse> handleBadRequestExceptionsClientDuplicatedtValid(Exception ex, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(
+				new Date(), ex.getMessage(), request.getDescription(false));
+		
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+	
+	
+	
 }

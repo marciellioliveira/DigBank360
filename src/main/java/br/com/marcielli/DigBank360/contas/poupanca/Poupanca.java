@@ -22,9 +22,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class Poupanca extends Conta {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private Long id;
 	
 	private float acrescimoTaxaRendimento;
 	private double taxaMensal;
@@ -70,7 +70,12 @@ public class Poupanca extends Conta {
 		}
 	}
 	
-	
+	public Poupanca(TipoDeConta tipo, String numeroDaConta, Cliente cliente) {
+		super();
+		setTipoDeConta(tipo);
+		setNumeroDaConta(numeroDaConta);
+		setCliente(cliente);
+	}
 	
 	@Override
 	public Double exibirSaldo() {

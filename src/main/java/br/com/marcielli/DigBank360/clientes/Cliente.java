@@ -2,7 +2,10 @@ package br.com.marcielli.DigBank360.clientes;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+import org.hibernate.annotations.processing.Pattern;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -32,10 +35,11 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;	
 	
-	private String nome;
+	private String nome;	
 	
 	private Long cpf;
 	
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate dataNascimento;
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -43,7 +47,9 @@ public class Cliente {
 	@JsonIgnoreProperties("cliente")
 	private Endereco endereco;		
 	
-	@OneToMany //One Cliente para ToMany Muitas contas
+	@OneToMany(cascade = CascadeType.ALL) //One Cliente para ToMany Muitas contas
+	@JoinColumn(name = "contas_id")
+	@JsonIgnoreProperties("cliente")
 	private List<Conta> contas;
 	
 	

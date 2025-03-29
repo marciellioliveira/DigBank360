@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.marcielli.DigBank360.helpers.TipoDeConta;
+
 @RestController
 @RequestMapping("/conta")
 public class ContaController {
@@ -32,25 +34,44 @@ public class ContaController {
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
 		try {
-			
-			//Conta added = contaService.save(conta);
+		
 			Conta added = contaService.save(conta);
 
 			if (added != null) {
-				return new ResponseEntity<>("Conta n° " + conta.getNumeroDaConta() + " do cliente "
+				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
 						+ conta.getCliente().getNome() + " adicionada com sucesso!", HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>("Conta n° " + conta.getNumeroDaConta() + " do cliente "
+				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
 						+ conta.getCliente().getNome() + " não foi adicionada!\nDigite os dados corretamente.",
 						HttpStatus.NOT_ACCEPTABLE);
 			}
 		} catch (Exception e) {
-			return new ResponseEntity<>("Conta n° " + conta.getNumeroDaConta() + " não foi adicionada!",
+			return new ResponseEntity<>("Conta não foi adicionada!",
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	
+
+//	@PostMapping("/save")
+//	public ResponseEntity<String> create(@RequestBody Conta conta) {
+//
+//		try {
+//					
+//			Conta added = contaService.save(conta);
+//
+//			if (added != null) {
+//				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
+//						+ conta.getCliente().getNome() + " adicionada com sucesso!", HttpStatus.CREATED);
+//			} else {
+//				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
+//						+ conta.getCliente().getNome() + " não foi adicionada!\nDigite os dados corretamente.",
+//						HttpStatus.NOT_ACCEPTABLE);
+//			}
+//		} catch (Exception e) {
+//			return new ResponseEntity<>("Conta não foi adicionada!",
+//					HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 	
 	
 	

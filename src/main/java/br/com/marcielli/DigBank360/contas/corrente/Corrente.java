@@ -22,12 +22,12 @@ import lombok.NoArgsConstructor;
 @Data
 public class Corrente extends Conta {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//private Long id;
 	
 	private Double taxaManutencaoMensal;
-	private String nomeDonoDaConta;
+	//private String nomeDonoDaConta;
 	
 	
 	public Corrente(Long id, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
@@ -44,7 +44,7 @@ public class Corrente extends Conta {
 			System.out.println("Categoria: "+categoriaDaConta);
 			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());			
 
-			this.nomeDonoDaConta = cliente.getNome();
+			//this.nomeDonoDaConta = cliente.getNome();
 		}
 		
 		if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
@@ -54,7 +54,7 @@ public class Corrente extends Conta {
 			System.out.println("Categoria: "+categoriaDaConta);
 			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
 			
-			this.nomeDonoDaConta = cliente.getNome();
+		//	this.nomeDonoDaConta = cliente.getNome();
 		}
 		
 		if(saldoDaConta > 5000d) {
@@ -64,10 +64,27 @@ public class Corrente extends Conta {
 			System.out.println("Categoria: "+categoriaDaConta);
 			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
 			
-			this.nomeDonoDaConta = cliente.getNome();
+			//this.nomeDonoDaConta = cliente.getNome();
 		}
 	}
+	
+	public Corrente(TipoDeConta tipo, String numeroDaConta, Cliente cliente, CategoriaDaConta categoriaDaConta, Double saldoDaConta) {
+		super();
+		setTipoDeConta(tipo);
+		setNumeroDaConta(numeroDaConta);	
+		setCliente(cliente);
+		setCategoriaDaConta(categoriaDaConta);
+		setSaldoDaConta(saldoDaConta);
+		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+		System.out.println("\nCONTA: "+TipoDeConta.CORRENTE+" n° "+numeroDaConta);
+		System.out.println("SALDO: "+saldoDaConta);
+		System.out.println("CATEGORIA: "+categoriaDaConta);
+		System.out.println("TAXA DE MANUTENÇÃO MENSAL: "+getTaxaManutencaoMensal());
+		System.out.println("CLIENTE: "+cliente.getNome()+" - CPF: "+cliente.getCpf()+" - DATA DE NASCIMENTO: "+cliente.getDataNascimento()+"\nENDEREÇO: "
+		+cliente.getEndereco()+"\nCONTAS: "+cliente.getContas());
+	}
 
+	
 	@Override
 	public Double exibirSaldo() {
 		return getSaldoDaConta();
@@ -129,7 +146,11 @@ public class Corrente extends Conta {
 	}
 	
 	public void descontarTaxaManutencaoMensal(Cliente cliente) {	
+		
+		
 //		ContaCorrenteService ccService = new ContaCorrenteService();
 //		ccService.descontarTaxaManutencaoMensal(cliente);		
 	}
+
+
 }

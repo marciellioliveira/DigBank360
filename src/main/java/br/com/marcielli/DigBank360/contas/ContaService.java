@@ -1,11 +1,19 @@
 package br.com.marcielli.DigBank360.contas;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import br.com.marcielli.DigBank360.clientes.ClienteRepository;
+import br.com.marcielli.DigBank360.clientes.ClienteService;
+import exception.clientes.UnsuportedClientDataWrongException;
+import exception.clientes.UnsuportedClientDontExistException;
+import exception.contas.UnsuportedContaNotValidException;
+import exception.contas.UnsuportedContaSaldoNullException;
 
 
 @Service
@@ -14,21 +22,58 @@ public class ContaService {
 	@Autowired
 	private ContaRepository contaRepository;
 	
+	@Autowired
+	private ClienteService clienteService;
+	
+	
 	//CREATE
 	public Conta save(Conta conta) {
 	
 		try {
-			//Fazer métodos de validação
-			if(!gerarNumeroDaConta(conta)) {
-				
+		
+			if(conta.getClass().getSimpleName().equals(null)) {
+				throw new UnsuportedContaNotValidException("Tipo de conta desconhecido.");
+			}			
+			
+			System.err.println("ID Cliente: "+conta.getCliente().getId());
+			
+			Conta newConta = ContaFactory.criarConta(conta);	
+			
+			//Se Cliente não existe > Precisa existir antes de criar a conta
+			if(newConta.getCliente() == null) {
+				throw new UnsuportedClientDontExistException("Você precisa ter um cliente cadastrado para abrir uma conta.");
 			}
 			
-			String tipo = conta.getTipoDeConta().toString();
-			Conta novaConta = ContaFactory.criarConta(tipo);
-			System.err.println("Tipo de Conta: "+tipo);
-			return contaRepository.save(novaConta);
+			//Se Cliente não tem dados válidos
+			if(clienteService.save(conta.getCliente()) == null) {
+				throw new UnsuportedClientDataWrongException("Dados do cliente inválido. Confira os dados e tente novamente.");
+			}
 			
+			
+			if(conta.getSaldoDaConta() == null) {
+				throw new UnsuportedClientDataWrongException("Saldo da conta é nulo");
+			}
+			
+			
+			//conta.getCliente().setContas(contasDoCliente);
+			//return update(newConta);
+			return contaRepository.save(newConta);
+			
+			
+		} catch (UnsuportedContaNotValidException e) {
+			System.err.println("Erro: "+e.getMessage());
+			return null;
+		} catch (UnsuportedClientDontExistException e) {
+			System.err.println("Erro: "+e.getMessage());
+			return null;
+		} catch (UnsuportedClientDataWrongException e) {
+			System.err.println("Erro: "+e.getMessage());
+			return null;
+		} catch(UnsuportedContaSaldoNullException e) {
+			System.err.println("Erro: "+e.getMessage());
+			return null;
 		} catch (Exception e) {
+			System.err.println("Erro: "+e.getMessage());
 			return null;
 		}		
 	}
@@ -60,34 +105,8 @@ public class ContaService {
 //		
 //	}
 	
-	public boolean gerarNumeroDaConta(Conta conta) {
-		
-		String tipoDeConta = conta.getTipoDeConta().toString();
-		
-		int[] sequencia = new int[8];
-		Random random = new Random();
-		String minhaConta = "";		
-		
-		for(int i=0; i<sequencia.length; i++) {			
-			sequencia[i] = 1 + random.nextInt(8);
-		}
-		
-		for(int i=0; i<sequencia.length; i++) {			
-			minhaConta += Integer.toString(sequencia[i]);
-		}		
-		
-		if(tipoDeConta.equalsIgnoreCase("CORRENTE")) {
-			minhaConta.concat("-CC");
-		} else if(tipoDeConta.equalsIgnoreCase("POUPANCA")) {
-			minhaConta.concat("-PP");
-		} else {
-			 throw new IllegalArgumentException("Tipo de conta desconhecido");
-		}
-		
-		conta.setNumeroDaConta(minhaConta);
 	
-		return true;
-	}
+	
 	
 
 }

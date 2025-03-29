@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import exception.clientes.UnsuportedClientDuplicatedExistException;
+
 
 @RestController
 @RequestMapping("/cliente")
@@ -33,6 +35,14 @@ public class ClienteController { //Controlador entre o BD (Repository) e o Usuá
 	public ResponseEntity<String> create(@RequestBody Cliente cliente) {	
 		
 		try {
+			
+			for(Cliente clienteExiste : clienteService.getAll()) {
+				System.err.println("Cliente já existe: "+clienteExiste.getCpf());			
+				if(clienteExiste.getCpf().equals(cliente.getCpf())) {
+					throw new UnsuportedClientDuplicatedExistException("Cliente já existe! Não é possível cadastrar o mesmo cliente duas vezes.");
+				}
+			}
+			
 			Cliente added = clienteService.save(cliente);
 			
 			if(added != null) {
@@ -45,6 +55,8 @@ public class ClienteController { //Controlador entre o BD (Repository) e o Usuá
 				//return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 				
 			}
+		} catch(UnsuportedClientDuplicatedExistException e) {
+			return new ResponseEntity<>("Cliente "+cliente.getNome()+" já existe!\nNão é possível adicioná-lo novamente.", HttpStatus.BAD_REQUEST);	
 		} catch (Exception e) {
 			return new ResponseEntity<>("Cliente "+cliente.getNome()+" não foi adicionado!", HttpStatus.INTERNAL_SERVER_ERROR);
 			//return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

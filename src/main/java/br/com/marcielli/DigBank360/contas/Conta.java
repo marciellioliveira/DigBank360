@@ -1,6 +1,8 @@
 package br.com.marcielli.DigBank360.contas;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -22,22 +24,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "tb_conta")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Getter
-@Setter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @JsonTypeInfo( //Essa anotação permite que o Jackson saiba qual classe concreta ele tem que instanciar de acordo com o Json.
 	    use = JsonTypeInfo.Id.NAME, //Vai identificar o tipo real de uma instância
 	    include = JsonTypeInfo.As.PROPERTY, //Mapeia os tipos de contas para o valor correspondente ao que enviei no JSON
-	    property = "tipoConta")  
+	    property = "tipo_conta")  
 	@JsonSubTypes({
 	    @JsonSubTypes.Type(value = Corrente.class, name = "CORRENTE"),
 	    @JsonSubTypes.Type(value = Poupanca.class, name = "POUPANCA")
@@ -54,18 +52,23 @@ public abstract class Conta {
 	@ManyToOne //Many = Varias contas ToOne para um cliente
 	private Cliente cliente;	
 	
+	@JsonIgnore
 	@Column(name = "tipo_conta")
 	private TipoDeConta tipoDeConta;
 	
+	@JsonIgnore
 	@Column(name = "categoria_conta")
 	private CategoriaDaConta categoriaDaConta;
+	
 	
 	@Column(name = "tipo_cartao")
 	private TipoDeCartao tipoDeCartao;
 	
+
 	@Column(name = "tipo_transferencia")
 	private TipoDeTransferencia tipoDeTransferencia;
 	
+	@JsonProperty("saldo_conta")
 	@Column(name = "saldo_conta")
 	private Double saldoDaConta;	
 	
@@ -76,6 +79,10 @@ public abstract class Conta {
 	public abstract Double exibirSaldo();	
 	public abstract void enviarPix(Double valor);
 	public abstract void receberPix(Double valor);
+	
+	
+	
+	//public abstract void atualizarTipoDeConta(TipoDeConta tipo);
 	
 //	@Override
 //	public String toString() {

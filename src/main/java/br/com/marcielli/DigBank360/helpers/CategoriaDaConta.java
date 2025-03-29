@@ -9,9 +9,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum CategoriaDaConta {
 	
-	COMUM(1, "Categoria Comum"),
-	SUPER(2, "Categoria Super"),
-	PREMIUM(3,"Categoria Premium");
+	COMUM(1, "COMUM"),
+	SUPER(2, "SUPER"),
+	PREMIUM(3,"PREMIUM");
 	
 	private final int cod;	
 	private final String categoria;	

@@ -8,24 +8,32 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import exception.UnsuportedAnoNascimentoException;
-import exception.UnsuportedBairroException;
-import exception.UnsuportedCepException;
-import exception.UnsuportedCidadeException;
-import exception.UnsuportedComplementoException;
-import exception.UnsuportedCpfException;
-import exception.UnsuportedDiaNascimentoException;
-import exception.UnsuportedEstadoException;
-import exception.UnsuportedMesNascimentoException;
-import exception.UnsuportedNameException;
-import exception.UnsuportedNumeroException;
-import exception.UnsuportedRuaException;
+import br.com.marcielli.DigBank360.contas.Conta;
+import br.com.marcielli.DigBank360.contas.ContaRepository;
+import br.com.marcielli.DigBank360.contas.ContaService;
+import exception.clientes.UnsuportedAnoNascimentoException;
+import exception.clientes.UnsuportedBairroException;
+import exception.clientes.UnsuportedCepException;
+import exception.clientes.UnsuportedCidadeException;
+import exception.clientes.UnsuportedClientDuplicatedExistException;
+import exception.clientes.UnsuportedComplementoException;
+import exception.clientes.UnsuportedCpfException;
+import exception.clientes.UnsuportedDiaNascimentoException;
+import exception.clientes.UnsuportedEstadoException;
+import exception.clientes.UnsuportedMesNascimentoException;
+import exception.clientes.UnsuportedNameException;
+import exception.clientes.UnsuportedNumeroException;
+import exception.clientes.UnsuportedRuaException;
 
 @Service
 public class ClienteService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ContaRepository contaRepository;
+	
 	
 	//CREATE
 	public Cliente save(Cliente cliente) {
@@ -80,46 +88,77 @@ public class ClienteService {
 				throw new UnsuportedCpfException("CPF inválido");
 			}
 			
-			return clienteRepository.save(cliente);
+			return clienteRepository.save(cliente);			
+			
+			
+		} catch(UnsuportedClientDuplicatedExistException e) {
+			
+			System.err.println("Erro: "+e.getMessage());
+			return null;
 			
 		} catch (UnsuportedNameException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		} catch (UnsuportedAnoNascimentoException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedMesNascimentoException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedDiaNascimentoException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedCepException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedEstadoException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedCidadeException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedBairroException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedRuaException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedNumeroException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedComplementoException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		}  catch (UnsuportedCpfException e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
+			
 		} catch (Exception e) {
-			System.err.println("Erro: "+e);
+			
+			System.err.println("Erro: "+e.getMessage());
 			return null;
 		}
 	}
