@@ -34,33 +34,22 @@ public class ClienteController { //Controlador entre o BD (Repository) e o Usuá
 	@PostMapping("/save")
 	public ResponseEntity<String> create(@RequestBody Cliente cliente) {	
 		
-		try {
-			
-			for(Cliente clienteExiste : clienteService.getAll()) {
-				System.err.println("Cliente já existe: "+clienteExiste.getCpf());			
-				if(clienteExiste.getCpf().equals(cliente.getCpf())) {
-					throw new UnsuportedClientDuplicatedExistException("Cliente já existe! Não é possível cadastrar o mesmo cliente duas vezes.");
-				}
-			}
-			
+		
+			System.err.println("Nome: "+cliente.getNome());
+			System.err.println("CPF: "+cliente.getCpf());
 			Cliente added = clienteService.save(cliente);
 			
 			if(added != null) {
 				return new ResponseEntity<>("Cliente "+cliente.getNome()+" adicionado com sucesso!", HttpStatus.CREATED);	
-				//return new ResponseEntity<>(HttpStatus.CREATED);
+				
 				
 				
 			} else {
 				return new ResponseEntity<>("Cliente "+cliente.getNome()+" não foi adicionado!\nDigite os dados corretamente.", HttpStatus.NOT_ACCEPTABLE);	
-				//return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			
 				
 			}
-		} catch(UnsuportedClientDuplicatedExistException e) {
-			return new ResponseEntity<>("Cliente "+cliente.getNome()+" já existe!\nNão é possível adicioná-lo novamente.", HttpStatus.BAD_REQUEST);	
-		} catch (Exception e) {
-			return new ResponseEntity<>("Cliente "+cliente.getNome()+" não foi adicionado!", HttpStatus.INTERNAL_SERVER_ERROR);
-			//return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	
 		
 		
 	}

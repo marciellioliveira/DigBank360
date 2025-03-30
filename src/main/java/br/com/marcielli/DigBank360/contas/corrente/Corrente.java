@@ -1,12 +1,15 @@
 package br.com.marcielli.DigBank360.contas.corrente;
 
 
+import java.util.ArrayList;
+
 import br.com.marcielli.DigBank360.clientes.Cliente;
 import br.com.marcielli.DigBank360.contas.Conta;
 import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,14 +20,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 @Data
 public class Corrente extends Conta {
 	
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//private Long id;
+	@Id
+	@Nonnull
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	private Double taxaManutencaoMensal;
 	//private String nomeDonoDaConta;
@@ -32,8 +36,9 @@ public class Corrente extends Conta {
 	
 	public Corrente(Long id, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
 			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta, String numeroDaConta) {
-		super(id, cliente, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta, numeroDaConta);		
+		super(id, cliente, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta);		
 			
+		setSaldoDaConta(saldoDaConta);
 		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
 		
 		if(saldoDaConta <= 1000d) {
@@ -68,22 +73,40 @@ public class Corrente extends Conta {
 		}
 	}
 	
-	public Corrente(TipoDeConta tipo, String numeroDaConta, Cliente cliente, CategoriaDaConta categoriaDaConta, Double saldoDaConta) {
-		super();
-		setTipoDeConta(tipo);
-		setNumeroDaConta(numeroDaConta);	
-		setCliente(cliente);
-		setCategoriaDaConta(categoriaDaConta);
-		setSaldoDaConta(saldoDaConta);
-		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
-		System.out.println("\nCONTA: "+TipoDeConta.CORRENTE+" n° "+numeroDaConta);
-		System.out.println("SALDO: "+saldoDaConta);
-		System.out.println("CATEGORIA: "+categoriaDaConta);
-		System.out.println("TAXA DE MANUTENÇÃO MENSAL: "+getTaxaManutencaoMensal());
-		System.out.println("CLIENTE: "+cliente.getNome()+" - CPF: "+cliente.getCpf()+" - DATA DE NASCIMENTO: "+cliente.getDataNascimento()+"\nENDEREÇO: "
-		+cliente.getEndereco()+"\nCONTAS: "+cliente.getContas());
-	}
+//	public Corrente() {
+//		super(id, tipoDeConta, categoriaDaConta, numeroDaConta, clientesaldoDaConta);
+//		setTipoDeConta(tipo);
+//		setNumeroDaConta(numeroDaConta);
+//		setCategoriaDaConta(categoriaDaConta);
+//		setSaldoDaConta(saldoDaConta);
+//		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+////		Corrente novaConta = new Corrente();
+////		novaConta.setTipoDeConta(tipo);
+////		novaConta.setNumeroDaConta(numeroDaConta);
+////		novaConta.setCategoriaDaConta(categoriaDaConta);
+////		novaConta.setSaldoDaConta(saldoDaConta);
+////		novaConta.setTaxaManutencaoMensal(saldoDaConta);
+////		novaConta.setCliente(cliente);
+////		ArrayList<Conta> listCont = new ArrayList<Conta>();
+////		listCont.add(novaConta);
+//		
+//		
+//		System.out.println("\nCONTA: "+TipoDeConta.CORRENTE+" n° "+numeroDaConta);
+//		System.out.println("SALDO: "+saldoDaConta);
+//		System.out.println("CATEGORIA: "+categoriaDaConta);
+//		System.out.println("TAXA DE MANUTENÇÃO MENSAL: "+getTaxaManutencaoMensal());
+//		System.out.println("CLIENTE: "+cliente.getNome()+" - CPF: "+cliente.getCpf()+" - DATA DE NASCIMENTO: "+cliente.getDataNascimento()+"\nENDEREÇO: "
+//		+cliente.getEndereco()+"\nCONTAS: "+cliente.getContas());
+//		
+//		
+//		
+//		
+//		
+//	}
 
+	public void criarContaFactory(Corrente conta) {
+		
+	}
 	
 	@Override
 	public Double exibirSaldo() {

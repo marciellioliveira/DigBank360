@@ -1,6 +1,9 @@
 package br.com.marcielli.DigBank360.contas;
 
 
+import java.util.List;
+
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -13,6 +16,7 @@ import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,8 +32,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tb_conta")
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 @Data
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @JsonTypeInfo( //Essa anotação permite que o Jackson saiba qual classe concreta ele tem que instanciar de acordo com o Json.
@@ -43,6 +47,7 @@ import lombok.NoArgsConstructor;
 public abstract class Conta {
 	
 	@Id
+	@Nonnull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
@@ -74,11 +79,21 @@ public abstract class Conta {
 	
 	@Column(name = "numero_conta")
 	private String numeroDaConta;
+	
+	public Conta() {}
+	
+	public Conta(Long id, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
+			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta) {}
 		
 	
 	public abstract Double exibirSaldo();	
 	public abstract void enviarPix(Double valor);
 	public abstract void receberPix(Double valor);
+	
+	
+	public List<Conta> getContasCliente(Cliente cliente){
+		return cliente.getContas();
+	}
 	
 	
 	

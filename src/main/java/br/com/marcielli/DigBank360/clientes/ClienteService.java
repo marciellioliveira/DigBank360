@@ -15,6 +15,7 @@ import exception.clientes.UnsuportedAnoNascimentoException;
 import exception.clientes.UnsuportedBairroException;
 import exception.clientes.UnsuportedCepException;
 import exception.clientes.UnsuportedCidadeException;
+import exception.clientes.UnsuportedClientDontExistException;
 import exception.clientes.UnsuportedClientDuplicatedExistException;
 import exception.clientes.UnsuportedComplementoException;
 import exception.clientes.UnsuportedCpfException;
@@ -87,6 +88,16 @@ public class ClienteService {
 			if(!isCpfValido(cliente.getCpf())) {
 				throw new UnsuportedCpfException("CPF inválido");
 			}
+
+			//Cliente id sempre vai ser nulo porque ele só vai ter id quando clienteRepository.save(cliente)
+			for(Cliente clienteExiste : getAll()) {
+				if(clienteExiste.getCpf().equals(cliente.getCpf()) || clienteExiste.getNome().equals(cliente.getNome()) 
+						|| clienteExiste.getEndereco().equals(cliente.getEndereco()) || clienteExiste.getDataNascimento().equals(cliente.getDataNascimento())) {
+					throw new UnsuportedClientDuplicatedExistException("Cliente duplicado. Cadastre um novo cliente.");
+				}
+			}
+			
+			
 			
 			return clienteRepository.save(cliente);			
 			
@@ -152,6 +163,10 @@ public class ClienteService {
 			return null;
 			
 		}  catch (UnsuportedCpfException e) {
+			
+			System.err.println("Erro: "+e.getMessage());
+			return null;
+		} catch (NullPointerException e) {
 			
 			System.err.println("Erro: "+e.getMessage());
 			return null;

@@ -7,6 +7,7 @@ import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,22 +18,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 @Data
 public class Poupanca extends Conta {
 	
-	//@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//private Long id;
+	@Id
+	@Nonnull
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	private Double acrescimoTaxaRendimento;
 	private Double taxaMensal;
 	
 	public Poupanca(Long id, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
 			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta, String numeroDaConta) {
-		super(id, cliente, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta, numeroDaConta);
+		super(id, cliente, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta);
 				
+		setSaldoDaConta(saldoDaConta);
 		if(saldoDaConta <= 1000) {
 			categoriaDaConta = CategoriaDaConta.COMUM;
 			super.setCategoriaDaConta(categoriaDaConta);

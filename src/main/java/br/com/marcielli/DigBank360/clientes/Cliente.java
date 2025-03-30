@@ -7,9 +7,11 @@ import java.util.Optional;
 import org.hibernate.annotations.processing.Pattern;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import br.com.marcielli.DigBank360.contas.Conta;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,17 +28,20 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tb_cliente")
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 @Data
 public class Cliente {
 	
 	@Id
+	@Nonnull
+	@JsonIgnore
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;	
 	
 	private String nome;	
 	
+	@Nonnull
 	private Long cpf;
 	
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -52,7 +57,16 @@ public class Cliente {
 	@JsonIgnoreProperties("cliente")
 	private List<Conta> contas;
 	
+	public Cliente(Long id, String nome, Long cpf, LocalDate dataNascimento, Endereco endereco, List<Conta> contas) {
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.dataNascimento = dataNascimento;
+		this.endereco = endereco;
+		this.contas = contas;
+	}
 	
+	public Cliente() {}
 	
 	
 	//@OneToOne(cascade = CascadeType.ALL)	

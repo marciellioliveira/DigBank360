@@ -34,25 +34,11 @@ public class ContaService {
 			if(conta.getClass().getSimpleName().equals(null)) {
 				throw new UnsuportedContaNotValidException("Tipo de conta desconhecido.");
 			}			
-			
-			System.err.println("ID Cliente: "+conta.getCliente().getId());
-			
+						
+			//Se o cliente existe, ele já cria a conta.
 			Conta newConta = ContaFactory.criarConta(conta);	
 			
-			//Se Cliente não existe > Precisa existir antes de criar a conta
-			if(newConta.getCliente() == null) {
-				throw new UnsuportedClientDontExistException("Você precisa ter um cliente cadastrado para abrir uma conta.");
-			}
-			
-			//Se Cliente não tem dados válidos
-			if(clienteService.save(conta.getCliente()) == null) {
-				throw new UnsuportedClientDataWrongException("Dados do cliente inválido. Confira os dados e tente novamente.");
-			}			
-			
-			if(conta.getSaldoDaConta() == null) {
-				throw new UnsuportedClientDataWrongException("Saldo da conta é nulo");
-			}			
-			
+
 			return contaRepository.save(newConta);
 						
 		} catch (UnsuportedContaNotValidException e) {
@@ -101,6 +87,10 @@ public class ContaService {
 	//LIST ALL
 	public List<Conta> getAll(){
 		return contaRepository.findAll();
+	}
+	
+	public List<Conta> getAllById(Long id){
+		return contaRepository.findAllById(id);
 	}
 	
 	//Validação de campos

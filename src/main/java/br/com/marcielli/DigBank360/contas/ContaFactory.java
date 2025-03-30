@@ -1,17 +1,15 @@
 package br.com.marcielli.DigBank360.contas;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import br.com.marcielli.DigBank360.clientes.Cliente;
-import br.com.marcielli.DigBank360.clientes.ClienteService;
 import br.com.marcielli.DigBank360.contas.corrente.Corrente;
 import br.com.marcielli.DigBank360.contas.poupanca.Poupanca;
 import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
+import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
+import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
 
 public class ContaFactory {
 
@@ -22,13 +20,7 @@ public class ContaFactory {
 	 * Controller da Conta para decidir e não o Controller de Corrente ou Poupança
 	 */
 	
-	@Autowired
-	private ClienteService clienteService;
-	
 	public static Conta criarConta(Conta conta) {
-		
-		Cliente clienteExiste = conta.getCliente();
-		System.err.println("Cliente: "+clienteExiste);
 		
 		//Tenho que chamar a List<Conta> do cliente aqui, toda vez quee eu adicionar uma conta preciso ver quem é o cliente e adicionar na lista tb
 		
@@ -51,13 +43,12 @@ public class ContaFactory {
 			
 			String numContaCorrente = numeroDaConta.concat("-CC");	
 			
+			Corrente contaCorrente = new Corrente(conta.getId(), conta.getCliente(), TipoDeConta.CORRENTE,conta.getCategoriaDaConta(), conta.getTipoDeCartao(), 
+					conta.getTipoDeTransferencia(), conta.getSaldoDaConta(), conta.getNumeroDaConta());
 			
-			//Ver se o id e cpf do cliente q eu to recebendo no parametro é igual o q ja existe existe, se sim, add conta pora ele
-			//Tb posso ignorar o endereço do cliente no json pq ele ja vai ta add la 
-			//for(Cliente clienteExiste : ClienteService.class.geta)
 
-
-			return new Corrente(TipoDeConta.CORRENTE, numeroDaConta, conta.getCliente(), categoriaDaConta, saldoDaConta);
+			return contaCorrente;
+			//return new Corrente(TipoDeConta.CORRENTE, numeroDaConta, conta.getCliente(), categoriaDaConta, saldoDaConta);
 			
 		} else if (conta.getClass().getSimpleName().equalsIgnoreCase("POUPANCA")) {
 			
@@ -90,18 +81,7 @@ public class ContaFactory {
 		}
 		
 	}
-	
-//	public static boolean clienteExiste(Cliente cliente) {
-//		for(Cliente clienteEx : clienteService.getAll()) {
-//			if(clienteEx.getCpf().equals(cliente.getCpf())) {
-//				return true;
-//			}
-//		}
-//		
-//		return false;
-//	}
-	
-	
+
 
 	public static String gerarNumeroDaConta(Conta conta) {
 		

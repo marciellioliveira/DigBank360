@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.marcielli.DigBank360.clientes.Cliente;
-import br.com.marcielli.DigBank360.clientes.ClienteService;
-import br.com.marcielli.DigBank360.helpers.TipoDeConta;
-import exception.clientes.UnsuportedClientDontExistException;
 
 @RestController
 @RequestMapping("/conta")
@@ -26,8 +22,8 @@ public class ContaController {
 	@Autowired
 	private ContaService contaService;
 	
-	@Autowired
-	private ClienteService clienteService;
+//	@Autowired
+//	private ClienteService clienteService;
 
 	// GET Rota Inicial
 	@GetMapping("/")
@@ -39,30 +35,19 @@ public class ContaController {
 	@PostMapping("/save")
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
-		try {
-			
-			for(Cliente clienteExiste : clienteService.getAll()) {
-				if(!clienteExiste.getCpf().equals(conta.getCliente().getCpf())) {
-					return new ResponseEntity<>("Cliente não existe! Você precisa ter um cliente cadastrado para abrir uma conta", HttpStatus.BAD_REQUEST);					
-				}
-			}
-			
 		
 			Conta added = contaService.save(conta);
+			
+			System.err.println("passou aqui tb");
 
 			if (added != null) {
-				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
-						+ conta.getCliente().getNome() + " adicionada com sucesso!", HttpStatus.CREATED);
+				
+				return new ResponseEntity<>("Conta adicionada com sucesso!", HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
-						+ conta.getCliente().getNome() + " não foi adicionada!\nDigite os dados corretamente.",
+				return new ResponseEntity<>("Conta não foi adicionada!\nDigite os dados corretamente.",
 						HttpStatus.NOT_ACCEPTABLE);
 			}
-		
-		} catch (Exception e) {
-			return new ResponseEntity<>("Conta não foi adicionada!",
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+	
 	}
 
 
