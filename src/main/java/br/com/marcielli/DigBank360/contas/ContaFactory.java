@@ -43,10 +43,13 @@ public class ContaFactory {
 			
 			String numContaCorrente = numeroDaConta.concat("-CC");	
 			
-			Corrente contaCorrente = new Corrente(conta.getId(), conta.getCliente(), TipoDeConta.CORRENTE,conta.getCategoriaDaConta(), conta.getTipoDeCartao(), 
+			Cliente novoCliente = new Cliente(conta.getCliente().getId(), conta.getCliente().getNome(), conta.getCliente().getCpf(), conta.getCliente().getDataNascimento(), conta.getCliente().getEndereco(), conta.getCliente().getContas());
+			
+			Corrente contaCorrente = new Corrente(conta.getId(), novoCliente, TipoDeConta.CORRENTE,conta.getCategoriaDaConta(), conta.getTipoDeCartao(), 
 					conta.getTipoDeTransferencia(), conta.getSaldoDaConta(), conta.getNumeroDaConta());
 			
-
+			//Fazer um factory para cliente e falar que o novoCliente tem a contaCorrente aqui
+			
 			return contaCorrente;
 			//return new Corrente(TipoDeConta.CORRENTE, numeroDaConta, conta.getCliente(), categoriaDaConta, saldoDaConta);
 			

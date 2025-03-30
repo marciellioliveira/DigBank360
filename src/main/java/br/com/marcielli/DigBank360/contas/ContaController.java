@@ -35,6 +35,15 @@ public class ContaController {
 	@PostMapping("/save")
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
+		//Para cadastrar uma conta, eu preciso pedir o ID do cliente mas como na minha lógica eu to passando o cliente através do json da conta não precisa
+		
+		//Primeiro tenho que verificar se o cliente dentro do json ta vazio, se tiver vazio, pedir pra adicionar os dados do cliente antes 
+		//ao arrumar o json e colocar os dados do cliente cadastro a conta e add na lista do cliente
+		//Se a conta já tiver tiver cliente com dados no json crio mais uma conta e adiciono ao cliente
+		//Se nao tem conta e tem cliente no json, crio uma conta e add na lista do cliente
+		
+		//Então no momento não preciso passar um id como parametro pq vou copmparar tudo dentro do json ja
+		
 		
 			Conta added = contaService.save(conta);
 			
@@ -50,51 +59,6 @@ public class ContaController {
 	
 	}
 
-
-//	@PostMapping("/save")
-//	public ResponseEntity<String> create(@RequestBody Conta conta) {
-//
-//		try {
-//					
-//			Conta added = contaService.save(conta);
-//
-//			if (added != null) {
-//				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
-//						+ conta.getCliente().getNome() + " adicionada com sucesso!", HttpStatus.CREATED);
-//			} else {
-//				return new ResponseEntity<>("Conta n° " + added.getNumeroDaConta() + " do cliente "
-//						+ conta.getCliente().getNome() + " não foi adicionada!\nDigite os dados corretamente.",
-//						HttpStatus.NOT_ACCEPTABLE);
-//			}
-//		} catch (Exception e) {
-//			return new ResponseEntity<>("Conta não foi adicionada!",
-//					HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
-	
-	
-	
-
-//	// POST
-//	@PostMapping("/save")
-//	public ResponseEntity<String> create(@RequestBody Conta conta) {
-//
-//		try {
-//			Conta added = contaService.save(conta);
-//
-//			if (added != null) {
-//				return new ResponseEntity<>("Conta n° " + conta.getNumeroDaConta() + " do cliente "
-//						+ conta.getCliente().getNome() + " adicionada com sucesso!", HttpStatus.CREATED);
-//			} else {
-//				return new ResponseEntity<>("Conta n° " + conta.getNumeroDaConta() + " do cliente "
-//						+ conta.getCliente().getNome() + " não foi adicionada!\nDigite os dados corretamente.",
-//						HttpStatus.NOT_ACCEPTABLE);
-//			}
-//		} catch (Exception e) {
-//			return new ResponseEntity<>("Conta n° " + conta.getNumeroDaConta() + " não foi adicionada!",
-//					HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
 
 	// GET CONTAS BY ID
 	@GetMapping("/findById/{id}")

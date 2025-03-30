@@ -91,10 +91,10 @@ public abstract class Conta {
 	public abstract void receberPix(Double valor);
 	
 	
-	public List<Conta> getContasCliente(Cliente cliente){
-		return cliente.getContas();
-	}
-	
+//	public List<Conta> getContasCliente(Cliente cliente){
+//		return cliente.getContas();
+//	}
+//	
 	
 	
 	//public abstract void atualizarTipoDeConta(TipoDeConta tipo);

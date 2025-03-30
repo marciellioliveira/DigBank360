@@ -34,9 +34,29 @@ public class ContaService {
 			if(conta.getClass().getSimpleName().equals(null)) {
 				throw new UnsuportedContaNotValidException("Tipo de conta desconhecido.");
 			}			
+			
+			
+			//Para cadastrar uma conta, eu preciso pedir o ID do cliente mas como na minha lógica eu to passando o cliente através do json da conta não precisa
+			
+			//Primeiro tenho que verificar se o cliente dentro do json ta vazio, se tiver vazio, pedir pra adicionar os dados do cliente antes 
+			if(conta.getCliente().getNome().isBlank() || conta.getCliente().getCpf().equals(null) || conta.getCliente().getDataNascimento().equals(null) || conta.getCliente().getEndereco().equals(null)) {
+				//Se Cliente dentro do Json está vazio -> Adicionar um cliente no Json para cadastrar uma conta
+				throw new UnsuportedClientDontExistException("Você precisa adicionar os dados do cliente para cadastrar uma conta.");
+			}			
+			
+			//ao arrumar o json e colocar os dados do cliente cadastro a conta e add na lista do cliente
+			//Se a conta já tiver tiver cliente com dados no json crio uma conta e adiciono ao cliente
+			Conta newConta = ContaFactory.criarConta(conta);
+
+			ArrayList<Conta> contaCriada = new ArrayList<Conta>();
+			contaCriada.add(newConta);
+			
+			newConta.getCliente().setContas(contaCriada);
+			
+			
 						
 			//Se o cliente existe, ele já cria a conta.
-			Conta newConta = ContaFactory.criarConta(conta);	
+//			Conta newConta = ContaFactory.criarConta(conta);	
 			
 
 			return contaRepository.save(newConta);

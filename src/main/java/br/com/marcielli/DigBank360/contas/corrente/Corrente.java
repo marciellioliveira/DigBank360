@@ -40,6 +40,14 @@ public class Corrente extends Conta {
 			
 		setSaldoDaConta(saldoDaConta);
 		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+		setCliente(cliente);
+		
+		System.err.println("ID: "+cliente.getId());
+		System.err.println("Nome: "+cliente.getNome());
+		System.err.println("cpf: "+cliente.getCpf());
+		System.err.println("nasc: "+cliente.getDataNascimento());
+		System.err.println("end: "+cliente.getEndereco());
+		System.err.println("contas: "+cliente.getContas());
 		
 		if(saldoDaConta <= 1000d) {
 			categoriaDaConta = CategoriaDaConta.COMUM;
