@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.marcielli.DigBank360.clientes.Cliente;
+import br.com.marcielli.DigBank360.clientes.ClienteService;
 
 @RestController
 @RequestMapping("/conta")
@@ -22,8 +24,8 @@ public class ContaController {
 	@Autowired
 	private ContaService contaService;
 	
-//	@Autowired
-//	private ClienteService clienteService;
+	@Autowired
+	private ClienteService clienteService;
 
 	// GET Rota Inicial
 	@GetMapping("/")
@@ -32,25 +34,24 @@ public class ContaController {
 	}
 	
 	//POST
-	@PostMapping("/save")
+	@PostMapping("/save")	//Ta salvando o cliente mas a conta não ta passando pro service 
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
-		//Para cadastrar uma conta, eu preciso pedir o ID do cliente mas como na minha lógica eu to passando o cliente através do json da conta não precisa
 		
-		//Primeiro tenho que verificar se o cliente dentro do json ta vazio, se tiver vazio, pedir pra adicionar os dados do cliente antes 
-		//ao arrumar o json e colocar os dados do cliente cadastro a conta e add na lista do cliente
-		//Se a conta já tiver tiver cliente com dados no json crio mais uma conta e adiciono ao cliente
-		//Se nao tem conta e tem cliente no json, crio uma conta e add na lista do cliente
+		 System.out.println("Tipo de Conta: " + conta.getTipoDeConta());
 		
-		//Então no momento não preciso passar um id como parametro pq vou copmparar tudo dentro do json ja
+			
+//			for(Cliente clienteExiste : clienteService.getAll()) {
+//				if(clienteExiste.getId().equals(conta.getCliente().getId())) {
+//					System.err.println("Cliente ID: "+conta.getCliente().getId());
+//				}
+//			}
 		
 		
 			Conta added = contaService.save(conta);
 			
-			System.err.println("passou aqui tb");
-
 			if (added != null) {
-				
+			
 				return new ResponseEntity<>("Conta adicionada com sucesso!", HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>("Conta não foi adicionada!\nDigite os dados corretamente.",
@@ -62,7 +63,7 @@ public class ContaController {
 
 	// GET CONTAS BY ID
 	@GetMapping("/findById/{id}")
-	public ResponseEntity findById(@PathVariable long id) {
+	public ResponseEntity<?> findById(@PathVariable long id) {
 		return contaService.findById(id).map(record -> ResponseEntity.ok().body(record))
 				.orElse(ResponseEntity.notFound().build());
 	}

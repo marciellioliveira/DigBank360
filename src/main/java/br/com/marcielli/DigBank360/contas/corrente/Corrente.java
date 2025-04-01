@@ -10,6 +10,7 @@ import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,13 +21,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-//@NoArgsConstructor
-//@AllArgsConstructor
-@Data
+@DiscriminatorValue(value = "Corrente")
 public class Corrente extends Conta {
 	
-	@Id
-	@Nonnull
+	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
@@ -41,13 +39,6 @@ public class Corrente extends Conta {
 		setSaldoDaConta(saldoDaConta);
 		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
 		setCliente(cliente);
-		
-		System.err.println("ID: "+cliente.getId());
-		System.err.println("Nome: "+cliente.getNome());
-		System.err.println("cpf: "+cliente.getCpf());
-		System.err.println("nasc: "+cliente.getDataNascimento());
-		System.err.println("end: "+cliente.getEndereco());
-		System.err.println("contas: "+cliente.getContas());
 		
 		if(saldoDaConta <= 1000d) {
 			categoriaDaConta = CategoriaDaConta.COMUM;
@@ -81,41 +72,63 @@ public class Corrente extends Conta {
 		}
 	}
 	
-//	public Corrente() {
-//		super(id, tipoDeConta, categoriaDaConta, numeroDaConta, clientesaldoDaConta);
-//		setTipoDeConta(tipo);
-//		setNumeroDaConta(numeroDaConta);
-//		setCategoriaDaConta(categoriaDaConta);
-//		setSaldoDaConta(saldoDaConta);
-//		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
-////		Corrente novaConta = new Corrente();
-////		novaConta.setTipoDeConta(tipo);
-////		novaConta.setNumeroDaConta(numeroDaConta);
-////		novaConta.setCategoriaDaConta(categoriaDaConta);
-////		novaConta.setSaldoDaConta(saldoDaConta);
-////		novaConta.setTaxaManutencaoMensal(saldoDaConta);
-////		novaConta.setCliente(cliente);
-////		ArrayList<Conta> listCont = new ArrayList<Conta>();
-////		listCont.add(novaConta);
-//		
-//		
-//		System.out.println("\nCONTA: "+TipoDeConta.CORRENTE+" n° "+numeroDaConta);
-//		System.out.println("SALDO: "+saldoDaConta);
-//		System.out.println("CATEGORIA: "+categoriaDaConta);
-//		System.out.println("TAXA DE MANUTENÇÃO MENSAL: "+getTaxaManutencaoMensal());
-//		System.out.println("CLIENTE: "+cliente.getNome()+" - CPF: "+cliente.getCpf()+" - DATA DE NASCIMENTO: "+cliente.getDataNascimento()+"\nENDEREÇO: "
-//		+cliente.getEndereco()+"\nCONTAS: "+cliente.getContas());
-//		
-//		
-//		
-//		
-//		
-//	}
-
-	public void criarContaFactory(Corrente conta) {
+	public Corrente(Long id, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
+			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta, String numeroDaConta) {
+		super(id, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta);	
 		
+		setSaldoDaConta(saldoDaConta);
+		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+		super.setCliente(getCliente());
+		
+		if(saldoDaConta <= 1000d) {
+			categoriaDaConta = CategoriaDaConta.COMUM;
+			super.setCategoriaDaConta(categoriaDaConta);
+			
+			System.out.println("Saldo: "+saldoDaConta);
+			System.out.println("Categoria: "+categoriaDaConta);
+			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());			
+
+			//this.nomeDonoDaConta = cliente.getNome();
+		}
+		
+		if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
+			categoriaDaConta = CategoriaDaConta.SUPER;
+			super.setCategoriaDaConta(categoriaDaConta);
+			System.out.println("Saldo: "+saldoDaConta);
+			System.out.println("Categoria: "+categoriaDaConta);
+			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
+			
+		//	this.nomeDonoDaConta = cliente.getNome();
+		}
+		
+		if(saldoDaConta > 5000d) {
+			categoriaDaConta = CategoriaDaConta.PREMIUM;
+			super.setCategoriaDaConta(categoriaDaConta);
+			System.out.println("Saldo: "+saldoDaConta);
+			System.out.println("Categoria: "+categoriaDaConta);
+			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
+			
+			//this.nomeDonoDaConta = cliente.getNome();
+		}
 	}
 	
+	public Corrente() {}
+	
+
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Double getTaxaManutencaoMensal() {
+		return taxaManutencaoMensal;
+	}
+
 	@Override
 	public Double exibirSaldo() {
 		return getSaldoDaConta();

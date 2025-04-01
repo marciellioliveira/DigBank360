@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import exception.clientes.UnsuportedClientDuplicatedExistException;
+import jakarta.transaction.Transactional;
 
 
 @RestController
@@ -31,7 +32,7 @@ public class ClienteController { //Controlador entre o BD (Repository) e o Usuá
 	}	
 	
 	//POST
-	@PostMapping("/save")
+	@PostMapping("/save")	
 	public ResponseEntity<String> create(@RequestBody Cliente cliente) {	
 		
 		

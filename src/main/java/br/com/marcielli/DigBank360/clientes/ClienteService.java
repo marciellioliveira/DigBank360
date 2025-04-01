@@ -25,6 +25,8 @@ import exception.clientes.UnsuportedMesNascimentoException;
 import exception.clientes.UnsuportedNameException;
 import exception.clientes.UnsuportedNumeroException;
 import exception.clientes.UnsuportedRuaException;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ClienteService {
@@ -32,11 +34,15 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
-	@Autowired
-	private ContaRepository contaRepository;
-	
+//	@Autowired
+//	private ContaRepository contaRepository;
+//	
+//	@Autowired
+//	private EntityManager entityManager;
+//	
 	
 	//CREATE
+	@Transactional
 	public Cliente save(Cliente cliente) {
 		
 		try {
@@ -98,8 +104,8 @@ public class ClienteService {
 			}
 			
 			
-			
-			return clienteRepository.save(cliente);			
+				
+		return clienteRepository.save(cliente);			
 			
 			
 		} catch(UnsuportedClientDuplicatedExistException e) {
@@ -177,6 +183,16 @@ public class ClienteService {
 			return null;
 		}
 	}
+	
+
+	
+//	@Transactional(rollbackOn = Exception.class)
+//	public Cliente merge(Cliente cliente) {
+//		if (cliente == null || cliente.getNome() == null || cliente.getCpf() == null) {
+//	        throw new IllegalArgumentException("Cliente inválido");
+//	    }
+//		return entityManager.merge(cliente);
+//	}
 	
 	//FIND BY ID
 	public Optional<Cliente> findById(Long id) {

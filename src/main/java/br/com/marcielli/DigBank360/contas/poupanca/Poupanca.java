@@ -8,6 +8,7 @@ import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,13 +19,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-//@NoArgsConstructor
-//@AllArgsConstructor
-@Data
+@DiscriminatorValue(value = "Poupanca")
 public class Poupanca extends Conta {
 	
 	@Id
-	@Nonnull
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
@@ -92,6 +90,34 @@ public class Poupanca extends Conta {
 		+cliente.getEndereco()+"\nCONTAS: "+cliente.getContas());
 	}
 	
+	public Poupanca() {}
+
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Double getAcrescimoTaxaRendimento() {
+		return acrescimoTaxaRendimento;
+	}
+
+	public void setAcrescimoTaxaRendimento(Double acrescimoTaxaRendimento) {
+		this.acrescimoTaxaRendimento = acrescimoTaxaRendimento;
+	}
+
+	public Double getTaxaMensal() {
+		return taxaMensal;
+	}
+
+	public void setTaxaMensal(Double taxaMensal) {
+		this.taxaMensal = taxaMensal;
+	}
+
 	@Override
 	public Double exibirSaldo() {
 		return getSaldoDaConta();

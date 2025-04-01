@@ -1,36 +1,40 @@
 package br.com.marcielli.DigBank360.helpers;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public enum TipoDeTransferencia {
 	
-	PIX(1, "PIX"),
-	TED(2, "TED"),
-	DOC(3, "DOC");
+	PIX("PIX"),
+	TED("TED"),
+	DOC("DOC");
 
-	private final int cod;
-	private final String tipoDeTransferencia;	
 
-	public int getCod() {
-		return cod;
+	private final String descricao;	
+	
+//	@JsonValue
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public String getTipoDeTransferencia() {
-		return tipoDeTransferencia;
+	private TipoDeTransferencia(String descricao) {
+		this.descricao = descricao;
 	}
 	
-	public static String getTipoDeTransferenciaPorCodigo(int cod) {
-		for(TipoDeTransferencia transferencia : TipoDeTransferencia.values()) {
-			if(cod == transferencia.getCod()) {
-				return transferencia.getTipoDeTransferencia();
-			}
-		}
-		
-		throw new IllegalArgumentException("Transferência: Código inválido: "+cod);
-	}
+//	@JsonCreator
+//	public static TipoDeConta fromDescricao(String descricao) { //O método "fromDescricao" faz o mapeamento da string (corrente ou poupanca) do Json para Enum
+//        for (TipoDeConta tipoDeConta : TipoDeConta.values()) {
+//            if (tipoDeConta.getDescricao().equalsIgnoreCase(descricao)) {
+//                return tipoDeConta;
+//            }
+//        }
+//        throw new IllegalArgumentException("Tipo de Conta: Descrição inválida: " + descricao);
+//    }
+//	
 
 }

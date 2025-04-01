@@ -1,33 +1,31 @@
 package br.com.marcielli.DigBank360.contas;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import br.com.marcielli.DigBank360.clientes.Cliente;
+import br.com.marcielli.DigBank360.clientes.ClienteFactory;
 import br.com.marcielli.DigBank360.contas.corrente.Corrente;
 import br.com.marcielli.DigBank360.contas.poupanca.Poupanca;
 import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
+import jakarta.transaction.Transactional;
 
 public class ContaFactory {
 
-	/*
-	 * Esse método será estático, ele vai decidir se a conta a ser criada é Corrente
-	 * ou Poupança Utilizei esse padrão de design porque a Classe Conta é abstract e
-	 * não pode ser instanciada da maneira que eu precisava porque eu queria usar o
-	 * Controller da Conta para decidir e não o Controller de Corrente ou Poupança
-	 */
-	
 	public static Conta criarConta(Conta conta) {
 		
-		//Tenho que chamar a List<Conta> do cliente aqui, toda vez quee eu adicionar uma conta preciso ver quem é o cliente e adicionar na lista tb
+	
 		
 		Double saldoDaConta = conta.getSaldoDaConta();
 		CategoriaDaConta categoriaDaConta = null;
 		
+		
 		if (conta.getClass().getSimpleName().equalsIgnoreCase(("CORRENTE"))) {
+		
 			String numeroDaConta = gerarNumeroDaConta(conta);			
 			
 			if(saldoDaConta <= 1000d) {
@@ -43,15 +41,12 @@ public class ContaFactory {
 			
 			String numContaCorrente = numeroDaConta.concat("-CC");	
 			
-			Cliente novoCliente = new Cliente(conta.getCliente().getId(), conta.getCliente().getNome(), conta.getCliente().getCpf(), conta.getCliente().getDataNascimento(), conta.getCliente().getEndereco(), conta.getCliente().getContas());
-			
-			Corrente contaCorrente = new Corrente(conta.getId(), novoCliente, TipoDeConta.CORRENTE,conta.getCategoriaDaConta(), conta.getTipoDeCartao(), 
+		
+			Corrente contaCorrente = new Corrente(conta.getId(), conta.getCliente(), TipoDeConta.CORRENTE,conta.getCategoriaDaConta(), conta.getTipoDeCartao(), 
 					conta.getTipoDeTransferencia(), conta.getSaldoDaConta(), conta.getNumeroDaConta());
-			
-			//Fazer um factory para cliente e falar que o novoCliente tem a contaCorrente aqui
-			
+		
+	
 			return contaCorrente;
-			//return new Corrente(TipoDeConta.CORRENTE, numeroDaConta, conta.getCliente(), categoriaDaConta, saldoDaConta);
 			
 		} else if (conta.getClass().getSimpleName().equalsIgnoreCase("POUPANCA")) {
 			
