@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.marcielli.DigBank360.clientes.Cliente;
-import br.com.marcielli.DigBank360.clientes.ClienteService;
 
 @RestController
 @RequestMapping("/conta")
@@ -27,7 +25,7 @@ public class ContaController {
 //	@Autowired
 //	private ClienteService clienteService;
 
-	// GET Rota Inicial
+	
 	@GetMapping("/")
 	public String inicio() {
 		return "Rest API de Banco Digital com Spring Boot JPA, H2 database, lombok e Padrão de Projeto de Separação em Camadas";
@@ -37,8 +35,8 @@ public class ContaController {
 	@PostMapping("/save")	//Ta salvando o cliente mas a conta não ta passando pro service 
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
-		
-		 System.out.println("Tipo de Conta: " + conta.getTipoDeConta().getDescricao());
+		 System.out.println("id: " + conta.getId());
+		// System.out.println("Tipo de Conta: " + conta.getTipoDeConta().getDescricao());
 		
 			
 //			for(Cliente clienteExiste : clienteService.getAll()) {

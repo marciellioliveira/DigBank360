@@ -39,7 +39,7 @@ public class ContaService {
 	
 	
 	//CREATE
-	@Transactional
+	//@Transactional
 	public Conta save(Conta conta) {
 	
 		try {
@@ -50,12 +50,13 @@ public class ContaService {
 			for(ContaRepository repositoryEscolhido : contaRepositories) {
 				
 				System.err.println("e aqui?");
-				if(repositoryEscolhido instanceof CorrenteRepository) {
+				if(repositoryEscolhido instanceof CorrenteRepository && conta.getTipoDeConta() == TipoDeConta.CORRENTE) {
+					//Corrente contaCorrente = new Corrente(conta.getId(), conta.getTipoDeConta(), conta.getCategoriaDaConta(), conta.getTipoDeCartao(), conta.getTipoDeTransferencia(), conta.getSaldoDaConta(), conta.getNumeroDaConta())
 					Conta newConta = ContaFactory.criarConta(conta);
 					return repositoryEscolhido.save(newConta);
 					
 					
-				} else if(repositoryEscolhido instanceof PoupancaRepository ) {
+				} else if(repositoryEscolhido instanceof PoupancaRepository  && conta.getTipoDeConta() == TipoDeConta.POUPANCA) {
 					Conta newConta = ContaFactory.criarConta(conta);
 					return repositoryEscolhido.save(newConta);
 				}

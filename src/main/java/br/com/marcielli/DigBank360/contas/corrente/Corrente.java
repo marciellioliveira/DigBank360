@@ -24,9 +24,9 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue(value = "Corrente")
 public class Corrente extends Conta {
 	
-	@Id	
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+//	@Id	
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Long id;
 	
 	private Double taxaManutencaoMensal;
 	//private String nomeDonoDaConta;
@@ -117,13 +117,13 @@ public class Corrente extends Conta {
 
 	
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 
 	public Double getTaxaManutencaoMensal() {
 		return taxaManutencaoMensal;

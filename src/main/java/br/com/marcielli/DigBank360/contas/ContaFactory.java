@@ -18,7 +18,7 @@ public class ContaFactory {
 
 	public static Conta criarConta(Conta conta) {
 		
-	
+	System.err.println("Id da conta no factory: "+conta.getId());
 		
 		Double saldoDaConta = conta.getSaldoDaConta();
 		CategoriaDaConta categoriaDaConta = null;

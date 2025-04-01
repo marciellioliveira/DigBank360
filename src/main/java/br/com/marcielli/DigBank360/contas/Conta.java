@@ -30,6 +30,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "conta")
@@ -52,9 +53,9 @@ public abstract class Conta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-//	@Version
-//	@Column(name = "version")
-//	private Long version;
+	@Version
+	@Column(name = "version")
+	private Long version;
 	
 //	@ManyToOne 
 //	@JoinColumn(name = "cliente_id") 
@@ -117,13 +118,13 @@ public abstract class Conta {
 	
 	
 	
-//	public Long getVersion() {
-//		return version;
-//	}
-//
-//	public void setVersion(Long version) {
-//		this.version = version;
-//	}
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
 
 	public Long getId() {
 		return id;
