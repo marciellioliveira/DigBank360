@@ -1,4 +1,4 @@
-package exception;
+package br.com.marcielli.DigBank360.exception;
 
 import java.io.Serializable;
 import java.util.Date;

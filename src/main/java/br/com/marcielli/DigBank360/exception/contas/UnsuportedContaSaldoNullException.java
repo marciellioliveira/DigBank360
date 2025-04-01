@@ -1,19 +1,18 @@
-package exception.clientes;
+package br.com.marcielli.DigBank360.exception.contas;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class UnsuportedBairroException extends RuntimeException  {
+public class UnsuportedContaSaldoNullException extends RuntimeException  {
 	
 	/**
-	 * Exception para Mês de Nascimento inválido
+	 * Exception Erro saldo da conta é nulo
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public UnsuportedBairroException(String ex) {
+	public UnsuportedContaSaldoNullException(String ex) {
 		super(ex);
 	}
-
 
 }

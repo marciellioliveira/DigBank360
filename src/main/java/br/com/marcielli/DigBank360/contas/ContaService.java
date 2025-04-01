@@ -13,11 +13,11 @@ import br.com.marcielli.DigBank360.contas.corrente.Corrente;
 import br.com.marcielli.DigBank360.contas.corrente.CorrenteRepository;
 import br.com.marcielli.DigBank360.contas.poupanca.Poupanca;
 import br.com.marcielli.DigBank360.contas.poupanca.PoupancaRepository;
+import br.com.marcielli.DigBank360.exception.clientes.UnsuportedClientDataWrongException;
+import br.com.marcielli.DigBank360.exception.clientes.UnsuportedClientDontExistException;
+import br.com.marcielli.DigBank360.exception.contas.UnsuportedContaNotValidException;
+import br.com.marcielli.DigBank360.exception.contas.UnsuportedContaSaldoNullException;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
-import exception.clientes.UnsuportedClientDataWrongException;
-import exception.clientes.UnsuportedClientDontExistException;
-import exception.contas.UnsuportedContaNotValidException;
-import exception.contas.UnsuportedContaSaldoNullException;
 import jakarta.transaction.Transactional;
 
 

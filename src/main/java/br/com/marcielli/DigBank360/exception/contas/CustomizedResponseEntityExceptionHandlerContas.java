@@ -1,4 +1,4 @@
-package exception.contas;
+package br.com.marcielli.DigBank360.exception.contas;
 
 import java.util.Date;
 
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import exception.ExceptionResponse;
-import exception.clientes.UnsuportedClientDataWrongException;
-import exception.clientes.UnsuportedClientDontExistException;
-import exception.clientes.UnsuportedNameException;
+import br.com.marcielli.DigBank360.exception.ExceptionResponse;
+import br.com.marcielli.DigBank360.exception.clientes.UnsuportedClientDataWrongException;
+import br.com.marcielli.DigBank360.exception.clientes.UnsuportedClientDontExistException;
+import br.com.marcielli.DigBank360.exception.clientes.UnsuportedNameException;
 
 public class CustomizedResponseEntityExceptionHandlerContas extends ResponseEntityExceptionHandler {
 	

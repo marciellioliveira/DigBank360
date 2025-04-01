@@ -23,9 +23,9 @@ public class ContaController {
 
 	@Autowired
 	private ContaService contaService;
-	
-	@Autowired
-	private ClienteService clienteService;
+//	
+//	@Autowired
+//	private ClienteService clienteService;
 
 	// GET Rota Inicial
 	@GetMapping("/")
@@ -38,7 +38,7 @@ public class ContaController {
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
 		
-		 System.out.println("Tipo de Conta: " + conta.getTipoDeConta());
+		 System.out.println("Tipo de Conta: " + conta.getTipoDeConta().getDescricao());
 		
 			
 //			for(Cliente clienteExiste : clienteService.getAll()) {

@@ -1,4 +1,4 @@
-package exception.clientes;
+package br.com.marcielli.DigBank360.exception.clientes;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

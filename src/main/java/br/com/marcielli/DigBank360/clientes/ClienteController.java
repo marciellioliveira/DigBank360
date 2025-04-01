@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import exception.clientes.UnsuportedClientDuplicatedExistException;
+import br.com.marcielli.DigBank360.exception.clientes.UnsuportedClientDuplicatedExistException;
 import jakarta.transaction.Transactional;
 
 

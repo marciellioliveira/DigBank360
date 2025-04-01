@@ -1,4 +1,4 @@
-package exception.clientes;
+package br.com.marcielli.DigBank360.exception.clientes;
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import exception.ExceptionResponse;
+import br.com.marcielli.DigBank360.exception.ExceptionResponse;
 
 @ControllerAdvice
 @RestController
