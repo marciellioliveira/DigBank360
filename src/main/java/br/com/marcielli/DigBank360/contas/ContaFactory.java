@@ -18,8 +18,6 @@ public class ContaFactory {
 
 	public static Conta criarConta(Conta conta) {
 		
-	System.err.println("Id da conta no factory: "+conta.getId());
-		
 		Double saldoDaConta = conta.getSaldoDaConta();
 		CategoriaDaConta categoriaDaConta = null;
 		
@@ -40,11 +38,17 @@ public class ContaFactory {
 			}			
 			
 			String numContaCorrente = numeroDaConta.concat("-CC");	
+			Corrente contaCorrente = new Corrente(conta.getId(), conta.getCliente(), TipoDeConta.CORRENTE,
+					conta.getSaldoDaConta(), conta.getNumeroDaConta());
+		
 			
-		
-			Corrente contaCorrente = new Corrente(conta.getId(), conta.getCliente(), TipoDeConta.CORRENTE,conta.getCategoriaDaConta(), conta.getTipoDeCartao(), 
-					conta.getTipoDeTransferencia(), conta.getSaldoDaConta(), conta.getNumeroDaConta());
-		
+//			System.err.println("ID conta: "+contaCorrente.getId());
+//			System.err.println("id cliente: "+contaCorrente.getCliente().getId());
+//			System.err.println("cliete da conta: "+contaCorrente.getCliente().getNome());
+//			System.err.println("cliete da conta: "+contaCorrente.getCliente().getCpf());
+//			System.err.println("Numero da conta: "+contaCorrente.getNumeroDaConta());
+//			System.err.println("tipo da conta: "+contaCorrente.getTipoDeConta());
+//			System.err.println("saldo da conta: "+contaCorrente.getSaldoDaConta());
 	
 			return contaCorrente;
 			
@@ -73,7 +77,10 @@ public class ContaFactory {
 			}			
 			
 			String numContaPoupanca = numeroDaConta.concat("-PP");
-			return new Poupanca(TipoDeConta.POUPANCA, numeroDaConta, conta.getCliente(), categoriaDaConta, saldoDaConta, acrescimoTaxaRendimento, taxaMensal);
+			Poupanca contaPoupanca = new Poupanca(conta.getId(), conta.getCliente(),  TipoDeConta.POUPANCA,
+					conta.getSaldoDaConta(), conta.getNumeroDaConta());
+			return contaPoupanca;
+		//	return new Poupanca(TipoDeConta.POUPANCA, numeroDaConta, conta.getCliente(), categoriaDaConta, saldoDaConta, acrescimoTaxaRendimento, taxaMensal);
 		} else {
 			return null;
 		}

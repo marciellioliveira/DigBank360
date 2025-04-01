@@ -1,7 +1,8 @@
 package br.com.marcielli.DigBank360.contas.corrente;
 
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.marcielli.DigBank360.clientes.Cliente;
 import br.com.marcielli.DigBank360.contas.Conta;
@@ -9,121 +10,52 @@ import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeCartao;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeTransferencia;
-import jakarta.annotation.Nonnull;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
-@DiscriminatorValue(value = "Corrente")
+@DiscriminatorValue(value = "CORRENTE")
 public class Corrente extends Conta {
 	
-//	@Id	
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Long id;
+	@Id	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
 	private Double taxaManutencaoMensal;
-	//private String nomeDonoDaConta;
-	
-	
-	public Corrente(Long id, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
-			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta, String numeroDaConta) {
-		super(id, cliente, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta);		
-			
-		setSaldoDaConta(saldoDaConta);
-		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
-		setCliente(cliente);
-		
-		if(saldoDaConta <= 1000d) {
-			categoriaDaConta = CategoriaDaConta.COMUM;
-			super.setCategoriaDaConta(categoriaDaConta);
-			
-			System.out.println("Saldo: "+saldoDaConta);
-			System.out.println("Categoria: "+categoriaDaConta);
-			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());			
-
-			//this.nomeDonoDaConta = cliente.getNome();
-		}
-		
-		if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
-			categoriaDaConta = CategoriaDaConta.SUPER;
-			super.setCategoriaDaConta(categoriaDaConta);
-			System.out.println("Saldo: "+saldoDaConta);
-			System.out.println("Categoria: "+categoriaDaConta);
-			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
-			
-		//	this.nomeDonoDaConta = cliente.getNome();
-		}
-		
-		if(saldoDaConta > 5000d) {
-			categoriaDaConta = CategoriaDaConta.PREMIUM;
-			super.setCategoriaDaConta(categoriaDaConta);
-			System.out.println("Saldo: "+saldoDaConta);
-			System.out.println("Categoria: "+categoriaDaConta);
-			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
-			
-			//this.nomeDonoDaConta = cliente.getNome();
-		}
-	}
-	
-	public Corrente(Long id, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
-			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta, String numeroDaConta) {
-		super(id, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta);	
-		
-		setSaldoDaConta(saldoDaConta);
-		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
-		super.setCliente(getCliente());
-		
-		if(saldoDaConta <= 1000d) {
-			categoriaDaConta = CategoriaDaConta.COMUM;
-			super.setCategoriaDaConta(categoriaDaConta);
-			
-			System.out.println("Saldo: "+saldoDaConta);
-			System.out.println("Categoria: "+categoriaDaConta);
-			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());			
-
-			//this.nomeDonoDaConta = cliente.getNome();
-		}
-		
-		if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
-			categoriaDaConta = CategoriaDaConta.SUPER;
-			super.setCategoriaDaConta(categoriaDaConta);
-			System.out.println("Saldo: "+saldoDaConta);
-			System.out.println("Categoria: "+categoriaDaConta);
-			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
-			
-		//	this.nomeDonoDaConta = cliente.getNome();
-		}
-		
-		if(saldoDaConta > 5000d) {
-			categoriaDaConta = CategoriaDaConta.PREMIUM;
-			super.setCategoriaDaConta(categoriaDaConta);
-			System.out.println("Saldo: "+saldoDaConta);
-			System.out.println("Categoria: "+categoriaDaConta);
-			System.out.println("Taxa de Manutenção Mensal: "+getTaxaManutencaoMensal());
-			
-			//this.nomeDonoDaConta = cliente.getNome();
-		}
-	}
 	
 	public Corrente() {}
 	
+	public Corrente(Long id, Long version, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta,
+			TipoDeCartao tipoDeCartao, TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta,
+			String numeroDaConta) {
+		super(id, version, cliente, tipoDeConta, categoriaDaConta, tipoDeCartao, tipoDeTransferencia, saldoDaConta,
+				numeroDaConta);
+		super.setSaldoDaConta(saldoDaConta);
+		super.setCliente(cliente);
+		super.setCategoriaDaConta(categoriaDaConta);
+		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+	}
 
+	public Corrente(Double taxaManutencaoMensal) {
+		super();
+		this.taxaManutencaoMensal = taxaManutencaoMensal;
+	}
 	
-	
-//	public Long getId() {
-//		return id;
-//	}
-//
-//	public void setId(Long id) {
-//		this.id = id;
-//	}
+	@JsonCreator
+	public Corrente(Long id, @JsonProperty("cliente") Cliente cliente, TipoDeConta tipoDaConta, @JsonProperty("saldoDaConta") Double saldoDaConta, String numeroDaConta) {
+		super(id, cliente,  tipoDaConta, saldoDaConta, numeroDaConta);		
+		super.setCliente(cliente);
+		super.setTipoDeConta(tipoDaConta);
+		super.setSaldoDaConta(saldoDaConta);
+		super.setNumeroDaConta(numeroDaConta);
+		//super.setCategoriaDaConta(categoriaDaConta);
+		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+	}
+
 
 	public Double getTaxaManutencaoMensal() {
 		return taxaManutencaoMensal;
@@ -195,6 +127,27 @@ public class Corrente extends Conta {
 //		ContaCorrenteService ccService = new ContaCorrenteService();
 //		ccService.descontarTaxaManutencaoMensal(cliente);		
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Corrente [taxaManutencaoMensal=" + taxaManutencaoMensal + ", getTaxaManutencaoMensal()="
+				+ getTaxaManutencaoMensal() + ", exibirSaldo()=" + exibirSaldo() + ", getVersion()=" + getVersion()
+				+ ", getId()=" + getId() + ", getCliente()=" + getCliente() + ", getTipoDeConta()=" + getTipoDeConta()
+				+ ", getCategoriaDaConta()=" + getCategoriaDaConta() + ", getTipoDeCartao()=" + getTipoDeCartao()
+				+ ", getTipoDeTransferencia()=" + getTipoDeTransferencia() + ", getSaldoDaConta()=" + getSaldoDaConta()
+				+ ", getNumeroDaConta()=" + getNumeroDaConta() + ", toString()=" + super.toString() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + "]";
+	}
+	
+	
 
 
 }

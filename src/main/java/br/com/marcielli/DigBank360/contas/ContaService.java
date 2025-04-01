@@ -9,6 +9,9 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.marcielli.DigBank360.clientes.Cliente;
+import br.com.marcielli.DigBank360.clientes.ClienteRepository;
+import br.com.marcielli.DigBank360.clientes.ClienteService;
 import br.com.marcielli.DigBank360.contas.corrente.Corrente;
 import br.com.marcielli.DigBank360.contas.corrente.CorrenteRepository;
 import br.com.marcielli.DigBank360.contas.poupanca.Poupanca;
@@ -17,7 +20,10 @@ import br.com.marcielli.DigBank360.exception.clientes.UnsuportedClientDataWrongE
 import br.com.marcielli.DigBank360.exception.clientes.UnsuportedClientDontExistException;
 import br.com.marcielli.DigBank360.exception.contas.UnsuportedContaNotValidException;
 import br.com.marcielli.DigBank360.exception.contas.UnsuportedContaSaldoNullException;
+import br.com.marcielli.DigBank360.helpers.CategoriaDaConta;
 import br.com.marcielli.DigBank360.helpers.TipoDeConta;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 
@@ -27,8 +33,12 @@ public class ContaService {
 //	@Autowired
 //	private ContaRepository contaRepository;
 //	
-//	@Autowired
-//	private ClienteService clienteService;
+	
+	 @PersistenceContext
+     private EntityManager entityManager;
+
+	@Autowired
+	private ClienteService clienteService;
 	
 	private final List<ContaRepository> contaRepositories;
 	
@@ -39,50 +49,74 @@ public class ContaService {
 	
 	
 	//CREATE
-	//@Transactional
+	@Transactional
 	public Conta save(Conta conta) {
 	
 		try {
-			System.err.println("Chegou aqui?");
-			System.err.println("Qual o tipo de conta? "+conta.getTipoDeConta());
 			
+		
+			entityManager.clear(); 
+
+			Conta novaConta = ContaFactory.criarConta(conta);
 			
-			for(ContaRepository repositoryEscolhido : contaRepositories) {
+			System.err.println("cpf "+novaConta.getCliente().getCpf());
+			
+			Cliente cliente = novaConta.getCliente();
+			// Cliente já existe no banco, usando o merge para atualizar
+			if(cliente != null && cliente.getCpf() != null) {
+				 Cliente clienteExistente = clienteService.findClienteByCpf(cliente.getCpf());
+				 if (clienteExistente != null) {
+					 cliente = entityManager.merge(clienteExistente);
+					 novaConta.setCliente(cliente);
+				 }
 				
-				System.err.println("e aqui?");
-				if(repositoryEscolhido instanceof CorrenteRepository && conta.getTipoDeConta() == TipoDeConta.CORRENTE) {
-					//Corrente contaCorrente = new Corrente(conta.getId(), conta.getTipoDeConta(), conta.getCategoriaDaConta(), conta.getTipoDeCartao(), conta.getTipoDeTransferencia(), conta.getSaldoDaConta(), conta.getNumeroDaConta())
-					Conta newConta = ContaFactory.criarConta(conta);
-					return repositoryEscolhido.save(newConta);
-					
-					
-				} else if(repositoryEscolhido instanceof PoupancaRepository  && conta.getTipoDeConta() == TipoDeConta.POUPANCA) {
-					Conta newConta = ContaFactory.criarConta(conta);
-					return repositoryEscolhido.save(newConta);
-				}
+			} else {
+				 // Cliente é novo, vai ser persistido como uma nova entidade
+	            entityManager.persist(cliente);  // Persistir o cliente novo
+	            novaConta.setCliente(cliente);   // Associar cliente à nova conta
 			}
 			
 			
-		throw new IllegalArgumentException("O repositório não existe");
-//
-//			System.err.println("e aqui?");
-//			
-//
-//			Conta newConta = ContaFactory.criarConta(conta);
-//			
-//		
-//				newConta.setCliente(conta.getCliente());
-//				contaRepository.save(newConta);
-//			
-//			
-//			
-//			
-//			System.err.println("ID cliente: "+conta.getCliente().getId());
-//
-//			
-//			return contaRepository.save(newConta);
-				
+			for(ContaRepository repositoryEscolhido : contaRepositories) {
+				if(repositoryEscolhido instanceof CorrenteRepository && novaConta.getTipoDeConta() == TipoDeConta.CORRENTE) {
+					
+					String numeroDaConta = gerarNumeroDaConta(conta);		
+					Double saldoDaConta = conta.getSaldoDaConta();
+					CategoriaDaConta categoriaDaConta = null;
+					
+					if(saldoDaConta <= 1000d) {
+						categoriaDaConta = CategoriaDaConta.COMUM;
+					}
+					
+					if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
+						categoriaDaConta = CategoriaDaConta.SUPER;			}
+					
+					if(saldoDaConta > 5000d) {
+						categoriaDaConta = CategoriaDaConta.PREMIUM;				
+					}			
+					
+					String numContaCorrente = numeroDaConta.concat("-CC");						
+					
+					Corrente contaCorrente = new Corrente(novaConta.getId(), novaConta.getCliente(), TipoDeConta.CORRENTE, novaConta.getSaldoDaConta(), novaConta.getNumeroDaConta());
+					
+					System.err.println("ID conta: "+contaCorrente.getId());
+					System.err.println("id cliente: "+contaCorrente.getCliente().getId());
+					System.err.println("cliete da conta: "+contaCorrente.getCliente().getNome());
+					System.err.println("cliete da conta: "+contaCorrente.getCliente().getCpf());
+					System.err.println("Numero da conta: "+contaCorrente.getNumeroDaConta());
+					System.err.println("tipo da conta: "+contaCorrente.getTipoDeConta());
+					System.err.println("saldo da conta: "+contaCorrente.getSaldoDaConta());		
+					
+					return repositoryEscolhido.save(contaCorrente);
+					
+				} else if(repositoryEscolhido instanceof PoupancaRepository && novaConta.getTipoDeConta() == TipoDeConta.POUPANCA) {
+					System.err.println("POUPANÇA PORRA");
+				}
 
+			}
+		
+			return null;
+			
 
 						
 		} catch (UnsuportedContaNotValidException e) {
@@ -217,6 +251,7 @@ public class ContaService {
 //	public List<Conta> getAllById(Long id){
 //		return contaRepository.findAllById(id);
 //	}
+	
 	
 	//Validação de campos
 //	public boolean validarTipoDeConta(TipoDeConta tipoEscolhido) {

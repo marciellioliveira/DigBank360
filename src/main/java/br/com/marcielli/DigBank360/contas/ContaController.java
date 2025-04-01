@@ -1,5 +1,6 @@
 package br.com.marcielli.DigBank360.contas;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.marcielli.DigBank360.clientes.Cliente;
+import br.com.marcielli.DigBank360.clientes.ClienteService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 
 @RestController
 @RequestMapping("/conta")
@@ -21,43 +26,38 @@ public class ContaController {
 
 	@Autowired
 	private ContaService contaService;
-//	
-//	@Autowired
-//	private ClienteService clienteService;
 
+	@Autowired
+	private ClienteService clienteService;
 	
+	
+
 	@GetMapping("/")
 	public String inicio() {
 		return "Rest API de Banco Digital com Spring Boot JPA, H2 database, lombok e Padrão de Projeto de Separação em Camadas";
 	}
-	
-	//POST
-	@PostMapping("/save")	//Ta salvando o cliente mas a conta não ta passando pro service 
+
+	// POST
+	@PostMapping("/save") // Ta salvando o cliente mas a conta não ta passando pro service
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
-		 System.out.println("id: " + conta.getId());
-		// System.out.println("Tipo de Conta: " + conta.getTipoDeConta().getDescricao());
-		
 			
-//			for(Cliente clienteExiste : clienteService.getAll()) {
-//				if(clienteExiste.getId().equals(conta.getCliente().getId())) {
-//					System.err.println("Cliente ID: "+conta.getCliente().getId());
-//				}
-//			}
+		Conta added = contaService.save(conta);
 		
-		
-			Conta added = contaService.save(conta);
-			
-			if (added != null) {
-			
-				return new ResponseEntity<>("Conta adicionada com sucesso!", HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity<>("Conta não foi adicionada!\nDigite os dados corretamente.",
-						HttpStatus.NOT_ACCEPTABLE);
-			}
 	
-	}
+		
+		if (added != null) {
 
+			return new ResponseEntity<>("Conta adicionada com sucesso!", HttpStatus.CREATED);
+		} else {
+
+			return new ResponseEntity<>("Conta não foi adicionada!\nDigite os dados corretamente.",
+					HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		
+
+	}
 
 	// GET CONTAS BY ID
 	@GetMapping("/findById/{id}")
@@ -98,5 +98,8 @@ public class ContaController {
 	public List<Conta> getAllClients() {
 		return contaService.getAll();
 	}
+	
+	
 
+	
 }

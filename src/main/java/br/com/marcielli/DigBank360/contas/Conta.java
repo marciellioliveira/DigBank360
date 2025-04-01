@@ -1,9 +1,10 @@
 package br.com.marcielli.DigBank360.contas;
 
 
-import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -22,6 +23,7 @@ import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,19 +37,18 @@ import jakarta.persistence.Version;
 @Entity
 @Table(name = "conta")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-		name = "tipo_conta",
-		discriminatorType = DiscriminatorType.STRING
-		)
-@JsonTypeInfo( //Essa anotação permite que o Jackson saiba qual classe concreta ele tem que instanciar de acordo com o Json.
-	    use = JsonTypeInfo.Id.NAME, //Vai identificar o tipo real de uma instância
-	    include = JsonTypeInfo.As.PROPERTY, //Mapeia os tipos de contas para o valor correspondente ao que enviei no JSON
+@DiscriminatorColumn(name = "tipo_conta", discriminatorType = DiscriminatorType.STRING)
+@JsonTypeInfo( 
+	    use = JsonTypeInfo.Id.NAME,
+	    include = JsonTypeInfo.As.PROPERTY, 
 	    property = "tipo_conta")  
 	@JsonSubTypes({
 	    @JsonSubTypes.Type(value = Corrente.class, name = "CORRENTE"),
 	    @JsonSubTypes.Type(value = Poupanca.class, name = "POUPANCA")
-	}) //Com essa @, eu posso usar a classe Conta abstrata no Controller porque configurei a hierarquia de classes 
+	}) 
+
 public abstract class Conta {
+	
 	
 	@Id	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,32 +58,25 @@ public abstract class Conta {
 	@Column(name = "version")
 	private Long version;
 	
-//	@ManyToOne 
-//	@JoinColumn(name = "cliente_id") 
-//	@JsonBackReference
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL) //tirei o all para testar
 	@JoinColumn(name = "cliente_id")
 	@JsonBackReference
 	private Cliente cliente;	
-	
 	
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("tipo_conta")	
 	private TipoDeConta tipoDeConta;
 	
-	@Enumerated(EnumType.STRING)
 	@Column(name = "categoria_conta")
 	private CategoriaDaConta categoriaDaConta;
 	
-	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo_cartao")
 	private TipoDeCartao tipoDeCartao;
 	
-	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo_transferencia")
 	private TipoDeTransferencia tipoDeTransferencia;
 	
-	@JsonProperty("saldo_conta")
+	
 	@Column(name = "saldo_conta")
 	private Double saldoDaConta;	
 	
@@ -90,32 +84,34 @@ public abstract class Conta {
 	private String numeroDaConta;
 	
 	
-	public Conta() {}
+	public Conta() {}	
 	
 	
-	public Conta(Long id, Cliente cliente,TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
-			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta) {
+	
+	public Conta(Long id, Long version, Cliente cliente, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta,
+			TipoDeCartao tipoDeCartao, TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta,
+			String numeroDaConta) {
+		super();
 		this.id = id;
+		this.version = version;
 		this.cliente = cliente;
 		this.tipoDeConta = tipoDeConta;
 		this.categoriaDaConta = categoriaDaConta;
 		this.tipoDeCartao = tipoDeCartao;
 		this.tipoDeTransferencia = tipoDeTransferencia;
 		this.saldoDaConta = saldoDaConta;
+		this.numeroDaConta = numeroDaConta;
 	}
 	
 	
-	public Conta(Long id, TipoDeConta tipoDeConta, CategoriaDaConta categoriaDaConta, TipoDeCartao tipoDeCartao, 
-			TipoDeTransferencia tipoDeTransferencia, Double saldoDaConta) {
+	public Conta(Long id, Cliente cliente, TipoDeConta tipoDaConta, Double saldoDaConta, String numeroDaConta) {
+		super();
 		this.id = id;
-		this.cliente = cliente;
-		this.tipoDeConta = tipoDeConta;
-		this.categoriaDaConta = categoriaDaConta;
-		this.tipoDeCartao = tipoDeCartao;
-		this.tipoDeTransferencia = tipoDeTransferencia;
+		this.cliente = cliente;		
+		this.tipoDeConta = tipoDaConta;
 		this.saldoDaConta = saldoDaConta;
+		this.numeroDaConta = numeroDaConta;
 	}
-	
 	
 	
 	public Long getVersion() {
@@ -140,9 +136,7 @@ public abstract class Conta {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
-	}
-	
-	
+	}	
 
 	public TipoDeConta getTipoDeConta() {
 		return tipoDeConta;
@@ -195,7 +189,14 @@ public abstract class Conta {
 	public abstract Double exibirSaldo();	
 	public abstract void enviarPix(Double valor);
 	public abstract void receberPix(Double valor);
-	
+
+	@Override
+	public String toString() {
+		return "Conta [id=" + id + ", version=" + version + ", cliente=" + cliente + ", tipoDeConta=" + tipoDeConta
+				+ ", categoriaDaConta=" + categoriaDaConta + ", tipoDeCartao=" + tipoDeCartao + ", tipoDeTransferencia="
+				+ tipoDeTransferencia + ", saldoDaConta=" + saldoDaConta + ", numeroDaConta=" + numeroDaConta
+				+ ", toString()=" + super.toString() + "]";
+	}
 	
 	
 

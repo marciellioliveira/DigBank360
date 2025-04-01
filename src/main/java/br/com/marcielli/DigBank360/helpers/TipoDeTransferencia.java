@@ -1,12 +1,5 @@
 package br.com.marcielli.DigBank360.helpers;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 
 public enum TipoDeTransferencia {
 	

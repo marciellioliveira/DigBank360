@@ -26,6 +26,7 @@ import br.com.marcielli.DigBank360.exception.clientes.UnsuportedNameException;
 import br.com.marcielli.DigBank360.exception.clientes.UnsuportedNumeroException;
 import br.com.marcielli.DigBank360.exception.clientes.UnsuportedRuaException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -37,8 +38,8 @@ public class ClienteService {
 //	@Autowired
 //	private ContaRepository contaRepository;
 //	
-//	@Autowired
-//	private EntityManager entityManager;
+	@Autowired
+	private EntityManager entityManager;
 //	
 	
 	//CREATE
@@ -185,6 +186,20 @@ public class ClienteService {
 	}
 	
 
+	public Cliente findClienteByCpf(Long long1) {
+	    // Consulta o cliente pelo CPF e retorna a lista de resultados
+	    List<Cliente> clientes = entityManager.createQuery("SELECT c FROM Cliente c WHERE c.cpf = :cpf", Cliente.class)
+	            .setParameter("cpf", long1)
+	            .getResultList();  // Retorna uma lista, nunca lança exceção
+
+	    // Se a lista estiver vazia, significa que não encontrou nenhum cliente com esse CPF
+	    if (clientes.isEmpty()) {
+	        return null;
+	    } else {
+	        // Se encontrar, retorna o primeiro cliente encontrado
+	        return clientes.get(0);
+	    }
+	}
 	
 //	@Transactional(rollbackOn = Exception.class)
 //	public Cliente merge(Cliente cliente) {
