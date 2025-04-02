@@ -16,65 +16,16 @@ import jakarta.transaction.Transactional;
 
 public class ContaFactory {
 
-	public static TipoDeConta criarConta(Conta novaConta) {
-		
-//		Double saldoDaConta = novaConta.getSaldoDaConta();
-//		CategoriaDaConta categoriaDaConta = null;
-//		String numeroDaConta = gerarNumeroDaConta(novaConta);	
-		
-		
+	public static TipoDeConta getTipoEscolhidoPeloCliente(Conta novaConta) {
+
 		if (novaConta.getClass().getSimpleName().equalsIgnoreCase(("CORRENTE"))) {		
 			
 			return TipoDeConta.CORRENTE;
-			
-//			if(saldoDaConta <= 1.000d) {
-//				categoriaDaConta = CategoriaDaConta.COMUM;
-//			}
-//			
-//			if(saldoDaConta > 1.000d && saldoDaConta <= 5.000d) {
-//				categoriaDaConta = CategoriaDaConta.SUPER;			
-//			}
-//			
-//			if(saldoDaConta > 5.000d) {
-//				categoriaDaConta = CategoriaDaConta.PREMIUM;				
-//			}			
-//			
-//			String numContaCorrente = numeroDaConta.concat("-CC");			
-//			
-//		
-//			return new Corrente(novaConta.getCliente(), TipoDeConta.CORRENTE,
-//					saldoDaConta, numContaCorrente, categoriaDaConta);
+
 			
 		} else if (novaConta.getClass().getSimpleName().equalsIgnoreCase("POUPANCA")) {
 			return TipoDeConta.POUPANCA;
-//			//String numeroDaConta = gerarNumeroDaConta(novaConta);
-//			Double acrescimoTaxaRendimento = 0.0d;
-//			Double taxaMensal = 0.0d;
-//			
-//			if(saldoDaConta <= 1000d) {
-//				categoriaDaConta = CategoriaDaConta.COMUM;
-//				acrescimoTaxaRendimento = 0.005d;
-//				taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
-//			}
-//			
-//			if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
-//				categoriaDaConta = CategoriaDaConta.SUPER;		
-//				acrescimoTaxaRendimento = 0.007d;
-//				taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
-//			}
-//			
-//			if(saldoDaConta > 5000d) {
-//				categoriaDaConta = CategoriaDaConta.PREMIUM;	
-//				acrescimoTaxaRendimento = 0.009d;
-//				taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
-//			}			
-//			
-//			String numContaPoupanca = numeroDaConta.concat("-PP");
-			
-//
-//			return new Poupanca(novaConta.getId(), novaConta.getCliente(),  TipoDeConta.POUPANCA,
-//					novaConta.getSaldoDaConta(), novaConta.getNumeroDaConta());
-		
+	
 		} else {
 			System.err.println("A conta não tem um tipo específico e por isso não foi criada");
 			return null;

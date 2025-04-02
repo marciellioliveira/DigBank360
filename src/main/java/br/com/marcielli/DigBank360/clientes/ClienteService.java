@@ -98,8 +98,7 @@ public class ClienteService {
 
 			//Cliente id sempre vai ser nulo porque ele só vai ter id quando clienteRepository.save(cliente)
 			for(Cliente clienteExiste : getAll()) {
-				if(clienteExiste.getCpf().equals(cliente.getCpf()) || clienteExiste.getNome().equals(cliente.getNome()) 
-						|| clienteExiste.getEndereco().equals(cliente.getEndereco()) || clienteExiste.getDataNascimento().equals(cliente.getDataNascimento())) {
+				if(clienteExiste.getCpf().equals(cliente.getCpf()) || clienteExiste.getNome().equals(cliente.getNome()) ) {
 					throw new UnsuportedClientDuplicatedExistException("Cliente duplicado. Cadastre um novo cliente.");
 				}
 			}

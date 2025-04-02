@@ -29,23 +29,13 @@ public class ContaController {
 
 	@Autowired
 	private ClienteService clienteService;
-	
-	
-
-	@GetMapping("/")
-	public String inicio() {
-		return "Rest API de Banco Digital com Spring Boot JPA, H2 database, lombok e Padrão de Projeto de Separação em Camadas";
-	}
 
 	// POST
 	@PostMapping("/save") // Ta salvando o cliente mas a conta não ta passando pro service
 	public ResponseEntity<String> create(@RequestBody Conta conta) {
 
-			
 		Conta added = contaService.save(conta);
-		
-	
-		
+
 		if (added != null) {
 
 			return new ResponseEntity<>("Conta adicionada com sucesso!", HttpStatus.CREATED);
@@ -54,9 +44,12 @@ public class ContaController {
 			return new ResponseEntity<>("Conta não foi adicionada!\nDigite os dados corretamente.",
 					HttpStatus.NOT_ACCEPTABLE);
 		}
-		
-		
 
+	}
+
+	@GetMapping("/")
+	public String inicio() {
+		return "Rest API de Banco Digital com Spring Boot JPA, H2 database, lombok e Padrão de Projeto de Separação em Camadas";
 	}
 
 	// GET CONTAS BY ID
@@ -79,7 +72,7 @@ public class ContaController {
 			record.setCategoriaDaConta(conta.getCategoriaDaConta());
 			record.setCliente(conta.getCliente());
 
-			Conta updated = contaService.update(conta);
+			Conta updated = contaService.updateMerge(conta);
 			return ResponseEntity.ok().body(updated);
 		}).orElse(ResponseEntity.notFound().build());
 	}
@@ -95,11 +88,8 @@ public class ContaController {
 
 	// GET ALL
 	@GetMapping("/all")
-	public List<Conta> getAllClients() {
+	public List<Conta> getAllClients() {	
 		return contaService.getAll();
 	}
-	
-	
 
-	
 }

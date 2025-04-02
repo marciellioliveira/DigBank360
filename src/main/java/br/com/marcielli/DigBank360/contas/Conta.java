@@ -55,7 +55,6 @@ public abstract class Conta {
 	private Long id;
 	
 	@Version
-	@Column(name = "version")
 	private Long version;
 	
 	@ManyToOne(cascade = CascadeType.ALL) //tirei o all para testar

@@ -49,7 +49,6 @@ public class Corrente extends Conta {
 	
 	@JsonCreator
 	public Corrente(@JsonProperty("cliente") Cliente cliente, TipoDeConta tipoDaConta, @JsonProperty("saldoDaConta") Double saldoDaConta, String numeroDaConta, CategoriaDaConta categoriaDaConta) {
-	  //  super.setId(id);
 	    super.setCliente(cliente);
 	    super.setTipoDeConta(tipoDaConta);
 	    super.setSaldoDaConta(saldoDaConta);
