@@ -91,19 +91,11 @@ public class ContaService {
 					Conta contaCorrente = new Corrente(conta.getCliente(), TipoDeConta.CORRENTE, saldoDaConta,
 							numContaCorrente, categoriaDaConta);
 					
-					//Peghr todas as contas do banco
-					//Se conta existe, merge igual cliente fez 
-					//se conta não existe, cria uma com persist
-					
-					System.err.println("ID: "+contaCorrente.getId());
-					System.err.println("Numero conta: "+contaCorrente.getNumeroDaConta());
-					
-					
 					//Se cliente existe, pega o ID do cliente e adiciona a conta a ele
 					//Se cliente não existe, cria o cliente, pega o ID e adiciona a conta a ele
 					
-					Cliente cliente = conta.getCliente();
 					
+					Cliente cliente = conta.getCliente();
 					// Cliente já existe no banco, usando o merge para atualizar
 					if (cliente != null && cliente.getCpf() != null) { //Cliente da conta que estou recebendo como parametro
 						Cliente clienteExistente = clienteService.findClienteByCpf(cliente.getCpf()); //Peguei o cliente existente
@@ -116,17 +108,13 @@ public class ContaService {
 
 					} else {
 						// Cliente é novo, vai ser persistido como uma nova entidade com a conta
-						cliente.getContas().add(contaCorrente); //Add conta corrente no cliente
-						contaCorrente.setCliente(cliente); //Adiciono o cliente que recebi de parametro na conta						
+						contaCorrente.setCliente(cliente);
 						entityManager.persist(cliente); // Persistir o cliente novo
-						
-						
-					}
-					
+					}			
 					
 					
 					 //Adiciona uma conta
-					return savePersist(contaCorrente); //Salvo a conta se o cliente existe ou se foi persistido agora
+					return savePersist(contaCorrente);
 					//return repositoryEscolhido.save(contaCorrente);
 
 				} else if (repositoryEscolhido instanceof PoupancaRepository && tipoDeConta == TipoDeConta.POUPANCA) {
@@ -156,8 +144,31 @@ public class ContaService {
 
 					Conta contaPoupanca = new Poupanca(conta.getCliente(), TipoDeConta.POUPANCA, saldoDaConta,
 							numContaPoupanca, categoriaDaConta, acrescimoTaxaRendimento, taxaMensal);
+					
+					//Se cliente existe, pega o ID do cliente e adiciona a conta a ele
+					//Se cliente não existe, cria o cliente, pega o ID e adiciona a conta a ele
+					
+					
+					Cliente cliente = conta.getCliente();
+					// Cliente já existe no banco, usando o merge para atualizar
+					if (cliente != null && cliente.getCpf() != null) { //Cliente da conta que estou recebendo como parametro
+						Cliente clienteExistente = clienteService.findClienteByCpf(cliente.getCpf()); //Peguei o cliente existente
+						if (clienteExistente != null) { //confirmo se existe mesmo
+							contaPoupanca.setCliente(clienteExistente); //Add o cliente a conta
+							clienteExistente.getContas().add(contaPoupanca); //Adiciona na lista do cliente a conta nova
+							entityManager.merge(clienteExistente);
+							
+						}
 
-					return repositoryEscolhido.save(contaPoupanca);
+					} else {
+						// Cliente é novo, vai ser persistido como uma nova entidade com a conta
+						contaPoupanca.setCliente(cliente);
+						entityManager.persist(cliente); // Persistir o cliente novo
+					}	
+
+					//Adiciona uma conta
+					return savePersist(contaPoupanca);
+					//return repositoryEscolhido.save(contaPoupanca);
 				}
 
 			}
@@ -242,8 +253,7 @@ public class ContaService {
 	}
 
 	@Transactional
-	public Conta updateMerge(Conta conta) {
-	
+	public Conta updateMerge(Conta conta) {	
 				
 		try {
 			

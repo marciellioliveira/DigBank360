@@ -101,8 +101,7 @@ public class ClienteService {
 				if(clienteExiste.getCpf().equals(cliente.getCpf()) || clienteExiste.getNome().equals(cliente.getNome()) ) {
 					throw new UnsuportedClientDuplicatedExistException("Cliente duplicado. Cadastre um novo cliente.");
 				}
-			}
-			
+			}		
 			
 				
 		return clienteRepository.save(cliente);			
