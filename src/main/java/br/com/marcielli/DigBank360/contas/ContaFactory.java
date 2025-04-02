@@ -16,45 +16,42 @@ import jakarta.transaction.Transactional;
 
 public class ContaFactory {
 
-	public static Conta criarConta(Conta conta) {
+	public static Conta criarConta(Conta novaConta) {
 		
-		Double saldoDaConta = conta.getSaldoDaConta();
+		Double saldoDaConta = novaConta.getSaldoDaConta();
 		CategoriaDaConta categoriaDaConta = null;
+		String numeroDaConta = gerarNumeroDaConta(novaConta);	
 		
 		
-		if (conta.getClass().getSimpleName().equalsIgnoreCase(("CORRENTE"))) {
-		
-			String numeroDaConta = gerarNumeroDaConta(conta);			
+		if (novaConta.getClass().getSimpleName().equalsIgnoreCase(("CORRENTE"))) {			
 			
-			if(saldoDaConta <= 1000d) {
+			if(saldoDaConta <= 1.000d) {
 				categoriaDaConta = CategoriaDaConta.COMUM;
 			}
 			
-			if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
-				categoriaDaConta = CategoriaDaConta.SUPER;			}
+			if(saldoDaConta > 1.000d && saldoDaConta <= 5.000d) {
+				categoriaDaConta = CategoriaDaConta.SUPER;			
+			}
 			
-			if(saldoDaConta > 5000d) {
+			if(saldoDaConta > 5.000d) {
 				categoriaDaConta = CategoriaDaConta.PREMIUM;				
 			}			
 			
 			String numContaCorrente = numeroDaConta.concat("-CC");	
-			Corrente contaCorrente = new Corrente(conta.getId(), conta.getCliente(), TipoDeConta.CORRENTE,
-					conta.getSaldoDaConta(), conta.getNumeroDaConta());
-		
 			
-//			System.err.println("ID conta: "+contaCorrente.getId());
-//			System.err.println("id cliente: "+contaCorrente.getCliente().getId());
-//			System.err.println("cliete da conta: "+contaCorrente.getCliente().getNome());
-//			System.err.println("cliete da conta: "+contaCorrente.getCliente().getCpf());
-//			System.err.println("Numero da conta: "+contaCorrente.getNumeroDaConta());
-//			System.err.println("tipo da conta: "+contaCorrente.getTipoDeConta());
-//			System.err.println("saldo da conta: "+contaCorrente.getSaldoDaConta());
+			
+			System.err.println("Factory Cliente: "+novaConta.getCliente());
+			System.err.println("Factory Tipo de Conta: "+TipoDeConta.CORRENTE);
+			System.err.println("Factory Saldo: "+novaConta.getSaldoDaConta());
+			System.err.println("Factory Numero: "+numContaCorrente);
+			
 	
-			return contaCorrente;
+			return new Corrente(novaConta.getCliente(), TipoDeConta.CORRENTE,
+					saldoDaConta, numContaCorrente, categoriaDaConta);
 			
-		} else if (conta.getClass().getSimpleName().equalsIgnoreCase("POUPANCA")) {
+		} else if (novaConta.getClass().getSimpleName().equalsIgnoreCase("POUPANCA")) {
 			
-			String numeroDaConta = gerarNumeroDaConta(conta);
+			//String numeroDaConta = gerarNumeroDaConta(novaConta);
 			Double acrescimoTaxaRendimento = 0.0d;
 			Double taxaMensal = 0.0d;
 			
@@ -77,11 +74,14 @@ public class ContaFactory {
 			}			
 			
 			String numContaPoupanca = numeroDaConta.concat("-PP");
-			Poupanca contaPoupanca = new Poupanca(conta.getId(), conta.getCliente(),  TipoDeConta.POUPANCA,
-					conta.getSaldoDaConta(), conta.getNumeroDaConta());
-			return contaPoupanca;
-		//	return new Poupanca(TipoDeConta.POUPANCA, numeroDaConta, conta.getCliente(), categoriaDaConta, saldoDaConta, acrescimoTaxaRendimento, taxaMensal);
+			
+//			Poupanca contaPoupanca = new Poupanca(novaConta.getId(), novaConta.getCliente(),  TipoDeConta.POUPANCA,
+//					novaConta.getSaldoDaConta(), novaConta.getNumeroDaConta());
+			return new Poupanca(novaConta.getId(), novaConta.getCliente(),  TipoDeConta.POUPANCA,
+					novaConta.getSaldoDaConta(), novaConta.getNumeroDaConta());
+		
 		} else {
+			System.err.println("A conta não tem um tipo específico e por isso não foi criada");
 			return null;
 		}
 		

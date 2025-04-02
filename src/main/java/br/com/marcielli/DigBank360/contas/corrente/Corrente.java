@@ -46,13 +46,13 @@ public class Corrente extends Conta {
 	}
 	
 	@JsonCreator
-	public Corrente(Long id, @JsonProperty("cliente") Cliente cliente, TipoDeConta tipoDaConta, @JsonProperty("saldoDaConta") Double saldoDaConta, String numeroDaConta) {
-		super(id, cliente,  tipoDaConta, saldoDaConta, numeroDaConta);		
-		super.setCliente(cliente);
-		super.setTipoDeConta(tipoDaConta);
-		super.setSaldoDaConta(saldoDaConta);
-		super.setNumeroDaConta(numeroDaConta);
-		//super.setCategoriaDaConta(categoriaDaConta);
+	public Corrente(@JsonProperty("cliente") Cliente cliente, TipoDeConta tipoDaConta, @JsonProperty("saldoDaConta") Double saldoDaConta, String numeroDaConta, CategoriaDaConta categoriaDaConta) {
+	  //  super.setId(id);
+	    super.setCliente(cliente);
+	    super.setTipoDeConta(tipoDaConta);
+	    super.setSaldoDaConta(saldoDaConta);
+	    super.setNumeroDaConta(numeroDaConta);
+	    super.setCategoriaDaConta(categoriaDaConta);
 		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
 	}
 

@@ -57,57 +57,60 @@ public class ContaService {
 		
 			entityManager.clear(); 
 
-			Conta novaConta = ContaFactory.criarConta(conta);
 			
-			System.err.println("cpf "+novaConta.getCliente().getCpf());
 			
-			Cliente cliente = novaConta.getCliente();
+			System.err.println("cpf "+conta.getCliente().getCpf());
+			
+			Cliente cliente = conta.getCliente();
 			// Cliente já existe no banco, usando o merge para atualizar
 			if(cliente != null && cliente.getCpf() != null) {
 				 Cliente clienteExistente = clienteService.findClienteByCpf(cliente.getCpf());
 				 if (clienteExistente != null) {
 					 cliente = entityManager.merge(clienteExistente);
-					 novaConta.setCliente(cliente);
+					 conta.setCliente(cliente);
 				 }
 				
 			} else {
 				 // Cliente é novo, vai ser persistido como uma nova entidade
 	            entityManager.persist(cliente);  // Persistir o cliente novo
-	            novaConta.setCliente(cliente);   // Associar cliente à nova conta
+	            conta.setCliente(cliente);   // Associar cliente à nova conta
 			}
+			
+			Conta novaConta = ContaFactory.criarConta(conta);
 			
 			
 			for(ContaRepository repositoryEscolhido : contaRepositories) {
 				if(repositoryEscolhido instanceof CorrenteRepository && novaConta.getTipoDeConta() == TipoDeConta.CORRENTE) {
 					
-					String numeroDaConta = gerarNumeroDaConta(conta);		
-					Double saldoDaConta = conta.getSaldoDaConta();
-					CategoriaDaConta categoriaDaConta = null;
+//					String numeroDaConta = gerarNumeroDaConta(conta);		
+//					Double saldoDaConta = conta.getSaldoDaConta();
+//					CategoriaDaConta categoriaDaConta = null;
+//					
+//					if(saldoDaConta <= 1000d) {
+//						categoriaDaConta = CategoriaDaConta.COMUM;
+//					}
+//					
+//					if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
+//						categoriaDaConta = CategoriaDaConta.SUPER;			
+//						}
+//					
+//					if(saldoDaConta > 5000d) {
+//						categoriaDaConta = CategoriaDaConta.PREMIUM;				
+//					}			
+//					
+//					String numContaCorrente = numeroDaConta.concat("-CC");						
 					
-					if(saldoDaConta <= 1000d) {
-						categoriaDaConta = CategoriaDaConta.COMUM;
-					}
+					//Corrente contaCorrente = new Corrente(novaConta.getId(), novaConta.getCliente(), TipoDeConta.CORRENTE, novaConta.getSaldoDaConta(), novaConta.getNumeroDaConta());
 					
-					if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
-						categoriaDaConta = CategoriaDaConta.SUPER;			}
+					System.err.println("ID conta: "+novaConta.getId());
+					System.err.println("id cliente: "+novaConta.getCliente().getId());
+					System.err.println("cliete da conta: "+novaConta.getCliente().getNome());
+					System.err.println("cliete da conta: "+novaConta.getCliente().getCpf());
+					System.err.println("Numero da conta: "+novaConta.getNumeroDaConta());
+					System.err.println("tipo da conta: "+novaConta.getTipoDeConta());
+					System.err.println("saldo da conta: "+novaConta.getSaldoDaConta());		
 					
-					if(saldoDaConta > 5000d) {
-						categoriaDaConta = CategoriaDaConta.PREMIUM;				
-					}			
-					
-					String numContaCorrente = numeroDaConta.concat("-CC");						
-					
-					Corrente contaCorrente = new Corrente(novaConta.getId(), novaConta.getCliente(), TipoDeConta.CORRENTE, novaConta.getSaldoDaConta(), novaConta.getNumeroDaConta());
-					
-					System.err.println("ID conta: "+contaCorrente.getId());
-					System.err.println("id cliente: "+contaCorrente.getCliente().getId());
-					System.err.println("cliete da conta: "+contaCorrente.getCliente().getNome());
-					System.err.println("cliete da conta: "+contaCorrente.getCliente().getCpf());
-					System.err.println("Numero da conta: "+contaCorrente.getNumeroDaConta());
-					System.err.println("tipo da conta: "+contaCorrente.getTipoDeConta());
-					System.err.println("saldo da conta: "+contaCorrente.getSaldoDaConta());		
-					
-					return repositoryEscolhido.save(contaCorrente);
+					return repositoryEscolhido.save(novaConta);
 					
 				} else if(repositoryEscolhido instanceof PoupancaRepository && novaConta.getTipoDeConta() == TipoDeConta.POUPANCA) {
 					System.err.println("POUPANÇA PORRA");
