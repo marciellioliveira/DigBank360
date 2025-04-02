@@ -21,9 +21,9 @@ import jakarta.persistence.Id;
 @DiscriminatorValue(value = "CORRENTE")
 public class Corrente extends Conta {
 	
-	@Id	
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+//	@Id	
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Long id;
 	
 	private Double taxaManutencaoMensal;
 	
@@ -38,6 +38,8 @@ public class Corrente extends Conta {
 		super.setCliente(cliente);
 		super.setCategoriaDaConta(categoriaDaConta);
 		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+		
+		
 	}
 
 	public Corrente(Double taxaManutencaoMensal) {
@@ -53,7 +55,7 @@ public class Corrente extends Conta {
 	    super.setSaldoDaConta(saldoDaConta);
 	    super.setNumeroDaConta(numeroDaConta);
 	    super.setCategoriaDaConta(categoriaDaConta);
-		this.taxaManutencaoMensal = setTaxaManutencaoMensal(saldoDaConta);
+		this.taxaManutencaoMensal = taxaManutencaoMensal;		
 	}
 
 
@@ -88,18 +90,18 @@ public class Corrente extends Conta {
 			total += valorAntigo + valor;
 		}
 					
-		if(total <= 1000d) {
+		if(total <= 1.000d) {
 			categoria = CategoriaDaConta.COMUM;
 			super.setCategoriaDaConta(categoria);
 			
 		}
 		
-		if(total > 1000d && total <= 5000d) {
+		if(total > 1.000d && total <= 5.000d) {
 			categoria = CategoriaDaConta.SUPER;
 			super.setCategoriaDaConta(categoria);
 		}
 		
-		if(total > 5000d) {
+		if(total > 5.000d) {
 			categoria = CategoriaDaConta.PREMIUM;
 			super.setCategoriaDaConta(categoria);
 		}
@@ -107,15 +109,15 @@ public class Corrente extends Conta {
 	
 	public Double setTaxaManutencaoMensal(Double valor) {
 		
-		if(valor <= 1000d) {		
+		if(valor <= 1.000d) {		
 			this.taxaManutencaoMensal = 12.00d;		
 		}
 		
-		if(valor  > 1000d && valor  <= 5000d) {			
+		if(valor  > 1.000d && valor  <= 5.000d) {			
 			this.taxaManutencaoMensal = 8.00d;			
 		}
 		
-		if(valor  > 5000d) {		
+		if(valor  > 5.000d) {		
 			this.taxaManutencaoMensal = 0d;		
 		}
 		return taxaManutencaoMensal;
@@ -128,13 +130,13 @@ public class Corrente extends Conta {
 //		ccService.descontarTaxaManutencaoMensal(cliente);		
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 
 	@Override
 	public String toString() {

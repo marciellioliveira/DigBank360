@@ -1,6 +1,7 @@
 package br.com.marcielli.DigBank360.contas.poupanca;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.marcielli.DigBank360.clientes.Cliente;
 import br.com.marcielli.DigBank360.contas.Conta;
@@ -50,6 +51,18 @@ public class Poupanca extends Conta {
 	
 	public Poupanca(Long id, Cliente cliente,  TipoDeConta tipoDaConta, Double saldoDaConta, String numeroDaConta) {
 		super(id, cliente, tipoDaConta, saldoDaConta, numeroDaConta);
+	}
+	
+	@JsonCreator
+	public Poupanca(@JsonProperty("cliente") Cliente cliente, TipoDeConta tipoDaConta, @JsonProperty("saldoDaConta") Double saldoDaConta, String numeroDaConta, CategoriaDaConta categoriaDaConta, Double acrescimoTaxaRendimento, Double taxaMensal) {
+	  //  super.setId(id);
+	    super.setCliente(cliente);
+	    super.setTipoDeConta(tipoDaConta);
+	    super.setSaldoDaConta(saldoDaConta);
+	    super.setNumeroDaConta(numeroDaConta);
+	    super.setCategoriaDaConta(categoriaDaConta);
+	    this.acrescimoTaxaRendimento = acrescimoTaxaRendimento;
+		this.taxaMensal = taxaMensal;		
 	}
 
 	

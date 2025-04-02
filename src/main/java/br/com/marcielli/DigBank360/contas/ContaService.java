@@ -55,11 +55,9 @@ public class ContaService {
 		try {
 			
 		
-			entityManager.clear(); 
-
+			entityManager.clear(); 			
 			
-			
-			System.err.println("cpf "+conta.getCliente().getCpf());
+			//System.err.println("cpf "+conta.getCliente().getCpf());
 			
 			Cliente cliente = conta.getCliente();
 			// Cliente já existe no banco, usando o merge para atualizar
@@ -76,44 +74,66 @@ public class ContaService {
 	            conta.setCliente(cliente);   // Associar cliente à nova conta
 			}
 			
-			Conta novaConta = ContaFactory.criarConta(conta);
-			
+			TipoDeConta tipoDeConta = ContaFactory.criarConta(conta);
+			Double saldoDaConta = conta.getSaldoDaConta();
+			CategoriaDaConta categoriaDaConta = null;
+			String numeroDaConta = gerarNumeroDaConta(conta);	
 			
 			for(ContaRepository repositoryEscolhido : contaRepositories) {
-				if(repositoryEscolhido instanceof CorrenteRepository && novaConta.getTipoDeConta() == TipoDeConta.CORRENTE) {
+				if(repositoryEscolhido instanceof CorrenteRepository && tipoDeConta == TipoDeConta.CORRENTE) {
 					
-//					String numeroDaConta = gerarNumeroDaConta(conta);		
-//					Double saldoDaConta = conta.getSaldoDaConta();
-//					CategoriaDaConta categoriaDaConta = null;
-//					
-//					if(saldoDaConta <= 1000d) {
-//						categoriaDaConta = CategoriaDaConta.COMUM;
-//					}
-//					
-//					if(saldoDaConta > 1000d && saldoDaConta <= 5000d) {
-//						categoriaDaConta = CategoriaDaConta.SUPER;			
-//						}
-//					
-//					if(saldoDaConta > 5000d) {
-//						categoriaDaConta = CategoriaDaConta.PREMIUM;				
-//					}			
-//					
-//					String numContaCorrente = numeroDaConta.concat("-CC");						
+					if(saldoDaConta <= 1.000d) {
+						categoriaDaConta = CategoriaDaConta.COMUM;
+					}
 					
-					//Corrente contaCorrente = new Corrente(novaConta.getId(), novaConta.getCliente(), TipoDeConta.CORRENTE, novaConta.getSaldoDaConta(), novaConta.getNumeroDaConta());
+					if(saldoDaConta > 1.000d && saldoDaConta <= 5.000d) {
+						categoriaDaConta = CategoriaDaConta.SUPER;			
+					}
 					
-					System.err.println("ID conta: "+novaConta.getId());
-					System.err.println("id cliente: "+novaConta.getCliente().getId());
-					System.err.println("cliete da conta: "+novaConta.getCliente().getNome());
-					System.err.println("cliete da conta: "+novaConta.getCliente().getCpf());
-					System.err.println("Numero da conta: "+novaConta.getNumeroDaConta());
-					System.err.println("tipo da conta: "+novaConta.getTipoDeConta());
-					System.err.println("saldo da conta: "+novaConta.getSaldoDaConta());		
+					if(saldoDaConta > 5.000d) {
+						categoriaDaConta = CategoriaDaConta.PREMIUM;				
+					}			
 					
-					return repositoryEscolhido.save(novaConta);
+					String numContaCorrente = numeroDaConta.concat("-CC");	
 					
-				} else if(repositoryEscolhido instanceof PoupancaRepository && novaConta.getTipoDeConta() == TipoDeConta.POUPANCA) {
-					System.err.println("POUPANÇA PORRA");
+					Conta contaCorrente = new Corrente(conta.getCliente(), TipoDeConta.CORRENTE,
+							saldoDaConta, numContaCorrente, categoriaDaConta);
+					
+					
+					return repositoryEscolhido.save(contaCorrente);
+					
+				//	return repositoryEscolhido.save(novaConta);
+					
+					
+				} else if(repositoryEscolhido instanceof PoupancaRepository && tipoDeConta == TipoDeConta.POUPANCA) {
+
+					Double acrescimoTaxaRendimento = 0.0d;
+					Double taxaMensal = 0.0d;
+					
+					if(saldoDaConta <= 1.000d) {
+						categoriaDaConta = CategoriaDaConta.COMUM;
+						acrescimoTaxaRendimento = 0.005d;
+						taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
+					}
+					
+					if(saldoDaConta > 1.000d && saldoDaConta <= 5.000d) {
+						categoriaDaConta = CategoriaDaConta.SUPER;		
+						acrescimoTaxaRendimento = 0.007d;
+						taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
+					}
+					
+					if(saldoDaConta > 5.000d) {
+						categoriaDaConta = CategoriaDaConta.PREMIUM;	
+						acrescimoTaxaRendimento = 0.009d;
+						taxaMensal = Math.pow(1+acrescimoTaxaRendimento, 1.0/12) - 1;
+					}			
+					
+					String numContaPoupanca = numeroDaConta.concat("-PP");
+					
+					Conta contaPoupanca = new Poupanca(conta.getCliente(), TipoDeConta.POUPANCA,
+							saldoDaConta, numContaPoupanca, categoriaDaConta, acrescimoTaxaRendimento, taxaMensal);
+					
+					return repositoryEscolhido.save(contaPoupanca);
 				}
 
 			}
@@ -226,9 +246,7 @@ public class ContaService {
 	    }
 	    return contas;
 	}
-
-
-	
+		
 	
 	
 	//FIND BY ID
